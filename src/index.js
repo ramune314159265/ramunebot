@@ -45,8 +45,8 @@ const client = new Client({
 
 const dotenv = require('dotenv');
 dotenv.config();
-const fs = require('fs');
 
+const fs = require('fs');
 fs.readdirSync('./src/events')
 	.filter(file => file.endsWith('.js'))
 	.map(file => require(`./events/${file}`))
