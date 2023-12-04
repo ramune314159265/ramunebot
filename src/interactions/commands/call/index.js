@@ -1,6 +1,4 @@
 const {
-  channelMention,
-  roleMention,
   userMention,
 } = require('discord.js');
 
