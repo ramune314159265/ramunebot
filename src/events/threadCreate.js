@@ -1,8 +1,6 @@
 const {
-    Events
+	Events
 } = require('discord.js');
-
-const {client} = require('..')
 
 module.exports.name = Events.ThreadCreate
 module.exports.execute = async thread => {
