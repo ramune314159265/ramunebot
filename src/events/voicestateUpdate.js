@@ -5,7 +5,7 @@ const {
 const { client } = require('..')
 
 module.exports.name = Events.VoiceStateUpdate
-module.exports.run = (oldState, newState) => {
+module.exports.execute = (oldState, newState) => {
     if (!(newState.guild.id === '930376081196875787')) {
         return
     }

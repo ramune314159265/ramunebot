@@ -5,7 +5,7 @@ const {
 const {client} = require('..')
 
 module.exports.name = Events.GuildScheduledEventCreate
-module.exports.run = async event => {
+module.exports.execute = async event => {
     if (event.guildId !== '930376081196875787') return
     client.channels.cache.get('1020881511899209851').threads.create({
         name: `${event.name}(${event.creator.username})`,

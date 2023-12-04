@@ -3,7 +3,7 @@ const {
 } = require('discord.js');
 
 module.exports.name = Events.ClientReady
-module.exports.run = () => {
+module.exports.execute = () => {
     console.log('logged in')
     require('../interactions/index')
 }
