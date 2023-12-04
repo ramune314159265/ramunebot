@@ -51,7 +51,7 @@ fs.readdirSync('./src/events')
 	.filter(file => file.endsWith('.js'))
 	.map(file => require(`./events/${file}`))
 	.forEach(eventData => {
-		client.on(eventData.name, eventData.run)
+		client.on(eventData.name, eventData.execute)
 	});
 
 process.on('uncaughtException', err => console.error('uncaughtException:', err))

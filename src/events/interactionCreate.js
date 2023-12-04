@@ -4,7 +4,7 @@ const {
 } = require('discord.js');
 
 module.exports.name = Events.InteractionCreate
-module.exports.run = async (interaction) => {
+module.exports.execute = async (interaction) => {
     switch (interaction.type) {
         case InteractionType.ApplicationCommand: {
             const { commands } = require('../interactions/index');

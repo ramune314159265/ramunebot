@@ -10,7 +10,7 @@ let defaultGameSystem
 })()
 
 module.exports.name = Events.MessageCreate
-module.exports.run = async message => {
+module.exports.execute = async message => {
 	if (message.author.bot || message.system) return
 	if (message.channel.name == "英文大会") {
 		message.channel.sendTyping()
