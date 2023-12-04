@@ -14,6 +14,7 @@
 
 ## 動かし方
 
+1. クローンする
 1. `npm i`を実行
 1. .envの`DISCORD_TOKEN`にトークンを入れる
 1. `node src/index`
