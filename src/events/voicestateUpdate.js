@@ -1,39 +1,46 @@
 const {
     Events
 } = require('discord.js');
-
-const { client } = require('..')
+const { createLocalStorage } = require("localstorage-ponyfill");
 
 module.exports.name = Events.VoiceStateUpdate
 module.exports.execute = (oldState, newState) => {
-    if (!(newState.guild.id === '930376081196875787')) {
+    const { client } = require('..')
+
+    const localStorage = createLocalStorage();
+    const guildChannelSetting = JSON.parse(localStorage.getItem(oldState.guild?.id ?? newState.guild?.id)) ?? {}
+    if (!guildChannelSetting.channelLog) {
         return
     }
+
+    //切断
     if (newState.channelId === null && oldState.channelId !== null) {
-        //ここはdisconnectしたときに発火する場所
-        return client.channels.cache.get('1089033872873893918').send({
+        client.channels.cache.get(guildChannelSetting.channelLog).send({
             content: `<@${oldState.member.id}>(@${oldState.member.user.username}) が<#${oldState.channel.id}> から切断しました`,
             allowedMentions: {
                 parse: []
             }
         })
+        return
     }
+    //接続
     if (newState.channelId !== null && oldState.channelId === null) {
-        //ここはconnectしたときに発火する場所
-        return client.channels.cache.get('1089033872873893918').send({
+        client.channels.cache.get(guildChannelSetting.channelLog).send({
             content: `<@${newState.member.id}>(@${newState.member.user.username}) が<#${newState.channel.id}> に参加しました`,
             allowedMentions: {
                 parse: []
             }
         })
+        return
     }
+    //移動
     if (newState.channelId !== oldState.channelId) {
-        //ここは移動したときに発火する場所
-        return client.channels.cache.get('1089033872873893918').send({
+        client.channels.cache.get(guildChannelSetting.channelLog).send({
             content: `<@${newState.member.id}>(@${newState.member.user.username}) が<#${oldState.channel.id}> から <#${newState.channel.id}> に移動しました`,
             allowedMentions: {
                 parse: []
             }
         })
+        return
     }
 }
