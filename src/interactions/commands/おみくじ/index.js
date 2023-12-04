@@ -1,6 +1,3 @@
-const { entersState, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, StreamType, NoSubscriberBehavior, AudioPlayer } = require('@discordjs/voice');
-const { Discord, ButtonStyle, ApplicationCommandOptionType, ButtonBuilder, ActionRowBuilder, ComponentType } = require('discord.js');
-const wait = require('util').promisify(setTimeout);
 module.exports = {
     data: {
         name: "おみくじ",

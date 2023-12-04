@@ -1,8 +1,6 @@
 const { AudioPlayerStatus,
     createAudioPlayer,
-    createAudioResource,
     joinVoiceChannel,
-    StreamType,
     NoSubscriberBehavior
 } = require('@discordjs/voice');
 const { ButtonStyle,

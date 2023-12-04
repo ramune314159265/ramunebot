@@ -1,5 +1,4 @@
-const { inlineCode, codeBlock } = require('@discordjs/builders');
-const { ApplicationCommandType, ApplicationCommandOptionType } = require('discord.js');
+const { ApplicationCommandType } = require('discord.js');
 module.exports = {
     data: {
         name: "Zalgo",

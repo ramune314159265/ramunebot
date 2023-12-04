@@ -1,4 +1,3 @@
-const wait = require('util').promisify(setTimeout);
 const { EmbedBuilder ,ApplicationCommandOptionType } = require('discord.js');
 module.exports = {
     data: {

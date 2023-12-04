@@ -1,4 +1,4 @@
-const { Discord, ActionRowBuilder, StringSelectMenuBuilder, ComponentType, EmbedBuilder, channelMention, roleMention, userMention } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, ComponentType, EmbedBuilder, roleMention } = require('discord.js');
 const { json } = require('express');
 module.exports = {
     data: {

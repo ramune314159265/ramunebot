@@ -1,5 +1,5 @@
-const { inlineCode, codeBlock } = require('@discordjs/builders');
-const { ApplicationCommandType, ApplicationCommandOptionType } = require('discord.js');
+const { codeBlock } = require('@discordjs/builders');
+const { ApplicationCommandType } = require('discord.js');
 module.exports = {
     data: {
         name: "コードブロックで表示",

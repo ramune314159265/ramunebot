@@ -1,4 +1,4 @@
-const { Discord, ButtonStyle, ApplicationCommandOptionType, ButtonBuilder, ActionRowBuilder, ComponentType } = require('discord.js');
+const { ApplicationCommandOptionType } = require('discord.js');
 module.exports = {
   data: {
     name: "geticon",
