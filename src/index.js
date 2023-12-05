@@ -46,6 +46,12 @@ const client = new Client({
 const dotenv = require('dotenv');
 dotenv.config();
 
+const discordToken = process.env.DISCORD_TOKEN
+
+if (!discordToken) {
+	throw new Error('.envのDISCORD_TOKENが設定されていません')
+}
+
 const fs = require('fs');
 fs.readdirSync('./src/events')
 	.filter(file => file.endsWith('.js'))
@@ -56,6 +62,6 @@ fs.readdirSync('./src/events')
 
 process.on('uncaughtException', err => console.error('uncaughtException:', err))
 
-client.login(process.env.DISCORD_TOKEN)
+client.login(discordToken)
 
 module.exports.client = client
