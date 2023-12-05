@@ -13,6 +13,6 @@ fs.readdirSync('./src/interactions/commands')
         data.push(commands[commandInfo.data.name].data)
     });
 
-client.application.commands.set(data, '972328945141829672');
+client.application.commands.set(data, process.env.NODE_ENV === 'development' ? '972328945141829672' : null);
 
 module.exports.commands = commands
