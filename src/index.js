@@ -7,17 +7,8 @@ http.createServer(function (request, response) {
 const { Client,
 	GatewayIntentBits,
 	Partials,
-	InteractionType,
-	channelMention,
-	roleMention,
-	userMention,
-	Events,
 	ActivityType,
-	EmbedBuilder,
-	time
 } = require('discord.js');
-const { ContextMenuCommandBuilder } = require('@discordjs/builders');
-const { ApplicationCommandType } = require('discord-api-types/v9');
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -59,6 +50,10 @@ fs.readdirSync('./src/events')
 	.forEach(eventData => {
 		client.on(eventData.name, eventData.execute)
 	});
+
+fs.readdirSync('./src/features')
+	.filter(file => file.endsWith('.js'))
+	.forEach(file => require(`./events/${file}`))
 
 process.on('uncaughtException', err => console.error('uncaughtException:', err))
 
