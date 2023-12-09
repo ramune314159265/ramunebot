@@ -47,7 +47,7 @@ fs.readdirSync('./src/events')
 
 fs.readdirSync('./src/features')
 	.filter(file => file.endsWith('.js'))
-	.forEach(file => require(`./events/${file}`))
+	.forEach(file => require(`./features/${file}`))
 
 const discordToken = process.env.DISCORD_TOKEN
 if (!discordToken) {
