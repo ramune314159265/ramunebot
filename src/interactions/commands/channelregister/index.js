@@ -19,6 +19,18 @@ module.exports = {
             required: false
           }
         ]
+      },{
+        type: ApplicationCommandOptionType.Subcommand,
+        name: "eewnoticechannel",
+        description: "地震通知チャンネルを指定します",
+        options: [
+          {
+            type: ApplicationCommandOptionType.Channel,
+            name: "channel",
+            description: "地震の情報を送るチャンネルを指定します(空で解除)",
+            required: false
+          }
+        ]
       }
     ]
   }
