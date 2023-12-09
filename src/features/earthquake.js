@@ -1,1 +1,70 @@
+const { EmbedBuilder } = require('discord.js')
+const { createLocalStorage } = require("localstorage-ponyfill");
+const { quakeScales,
+    domesticTsunamiInfos,
+    magnitudeNormalizer,
+    depthNormalizer
+} = require('../util/earthquake')
 const { WebSocket } = require('ws');
+const ws = new WebSocket('wss://api-realtime-sandbox.p2pquake.net/v2/ws')
+
+ws.addEventListener('message', (message) => {
+    const rawData = JSON.parse(message.data)
+    console.log(rawData)
+
+    const embed = new EmbedBuilder()
+
+    switch (rawData.code) {
+        //地震情報
+        case 551:
+            embed.setTitle('地震情報')
+                .setDescription(
+                    [
+                        `震源…${rawData.earthquake.hypocenter.name}`,
+                        `最大震度…${quakeScales[rawData.earthquake.maxScale].name}`,
+                        `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
+                        `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
+                        `津波…${domesticTsunamiInfos[rawData.earthquake.domesticTsunami]}`
+                    ].join('\n')
+                )
+                .setColor(quakeScales[rawData.earthquake.maxScale].hexColor ?? 'White')
+                .setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
+                .setFooter({ text: `情報源:${rawData.issue.source},${rawData._id}` })
+                .setTimestamp(new Date(rawData.earthquake.time))
+            break;
+        case 554:
+            embed.setTitle('緊急地震速報!')
+                .setDescription('地震を検出しました')
+                .setColor('Red')
+                .setTimestamp(new Date(rawData.time))
+        case (556 && rawData.cancelled):
+            embed.setTitle('緊急地震速報(取り消し)')
+                .setDescription('緊急地震速報はキャンセルされました')
+                .setColor('Green')
+                .setTimestamp(new Date(rawData.time))
+            break;
+        case 556:
+            embed.setTitle('緊急地震速報(警報)')
+                .setDescription(
+                    [
+                        `震源…${rawData.earthquake.hypocenter.name}(${rawData.earthquake.condition})`,
+                        `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
+                        `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
+                    ].join('\n')
+                )
+                .setColor('Red')
+                .setFooter({ text: `${rawData.eventId}` })
+                .setTimestamp(new Date(rawData.earthquake.originTime))
+        default:
+            break;
+    }
+    const localStorage = createLocalStorage();
+    const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'))
+
+    const { client } = require('../index')
+    for (const [key, value] of Object.entries(noticeChannels)) {
+        client.channels.cache.get(value).send({
+            embeds: [embed]
+        })
+    }
+})

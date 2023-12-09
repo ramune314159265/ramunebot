@@ -4,7 +4,7 @@ const quakeScales = {
         name: '不明',
         level: -1,
         ansiColor: '',
-        hexColor: ''
+        hexColor: '#FFFFFF'
     },
     '10': {
         name: '1',
@@ -100,8 +100,31 @@ const quakeInfoTypes = {
     Other: 'その他の情報'
 }
 
+/**
+ * マグニチュードデータで-1だったら情報なしと返し、それ以外にはMを付ける
+ * @param {number} magnitude - マグニチュードデータ
+ * @returns {(number|string)} - 正規化した結果
+ */
+const magnitudeNormalizer = (magnitude) => {
+    if (magnitude === -1) return '情報なし'
+    return `M${magnitude}`
+}
+
+/**
+ * 震源の深さで-1だったら情報なし、0だったらごく浅いと返し、それ以外には単位を付ける
+ * @param {number} magnitude - 深さ
+ * @returns {(string)} - 正規化した結果
+ */
+const depthNormalizer = (depth) => {
+    if (depth === -1) return '情報なし'
+    if (depth === 0) return 'ごく浅い'
+    return `${depth}km`
+}
+
 module.exports.quakeScales = quakeScales
 module.exports.TsunamiScales = TsunamiScales
 module.exports.domesticTsunamiInfos = domesticTsunamiInfos
 module.exports.foreignTsunamiInfos = foreignTsunamiInfos
 module.exports.quakeInfoTypes = quakeInfoTypes
+module.exports.magnitudeNormalizer = magnitudeNormalizer
+module.exports.depthNormalizer = depthNormalizer
