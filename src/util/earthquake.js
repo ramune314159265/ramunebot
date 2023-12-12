@@ -103,7 +103,7 @@ const quakeInfoTypes = {
 /**
  * マグニチュードデータで-1だったら情報なしと返し、それ以外にはMを付ける
  * @param {number} magnitude - マグニチュードデータ
- * @returns {(number|string)} - 正規化した結果
+ * @returns {string} - 正規化した結果
  */
 const magnitudeNormalizer = (magnitude) => {
     if (magnitude === -1) return '情報なし'
@@ -113,7 +113,7 @@ const magnitudeNormalizer = (magnitude) => {
 /**
  * 震源の深さで-1だったら情報なし、0だったらごく浅いと返し、それ以外には単位を付ける
  * @param {number} magnitude - 深さ
- * @returns {(string)} - 正規化した結果
+ * @returns {string} - 正規化した結果
  */
 const depthNormalizer = (depth) => {
     if (depth === -1) return '情報なし'
