@@ -79,6 +79,7 @@ wolfxWs.addEventListener('message', (message) => {
     const rawData = JSON.parse(message.data)
     console.log(rawData)
 
+    const { client } = require('../index')
     client.channels.cache.get('974599935053942815').send(message.data)
 
     const embed = new EmbedBuilder()
