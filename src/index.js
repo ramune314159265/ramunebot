@@ -45,10 +45,6 @@ fs.readdirSync('./src/events')
 		client.on(eventData.name, eventData.execute)
 	});
 
-fs.readdirSync('./src/features')
-	.filter(file => file.endsWith('.js'))
-	.forEach(file => require(`./events/${file}`))
-
 const discordToken = process.env.DISCORD_TOKEN
 if (!discordToken) {
 	throw new Error('.envのDISCORD_TOKENが設定されていません')
