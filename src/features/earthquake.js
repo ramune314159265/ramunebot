@@ -6,7 +6,20 @@ const { quakeScales,
     depthNormalizer
 } = require('../util/earthquake')
 const { WebSocket } = require('ws');
-const p2pQuakeWs = new WebSocket('wss://api-realtime-sandbox.p2pquake.net/v2/ws')
+const p2pQuakeWs = new WebSocket('wss://api.p2pquake.net/v2/ws')
+const wolfxWs = new WebSocket('wss://ws-api.wolfx.jp/jma_eew')
+
+const sendEEWInfo = (embed) => {
+    const localStorage = createLocalStorage();
+    const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'))
+
+    const { client } = require('../index')
+    for (const [key, value] of Object.entries(noticeChannels)) {
+        client.channels.cache.get(value).send({
+            embeds: [embed]
+        })
+    }
+}
 
 p2pQuakeWs.addEventListener('message', (message) => {
     const rawData = JSON.parse(message.data)
@@ -58,13 +71,33 @@ p2pQuakeWs.addEventListener('message', (message) => {
         default:
             break;
     }
-    const localStorage = createLocalStorage();
-    const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'))
 
-    const { client } = require('../index')
-    for (const [key, value] of Object.entries(noticeChannels)) {
-        client.channels.cache.get(value).send({
-            embeds: [embed]
-        })
+    sendEEWInfo(embed)
+})
+
+wolfxWs.addEventListener('message', (message) => {
+    const rawData = JSON.parse(message.data)
+    console.log(rawData)
+
+    client.channels.cache.get('974599935053942815').send(message.data)
+
+    const embed = new EmbedBuilder()
+
+    switch (rawData.code) {
+        //地震情報
+        case 'jma_eew':
+            embed.setTitle('緊急地震速報(予報)')
+                .setDescription(
+                    [
+                        `震源…${rawData.Hypocenter}`,
+                        `最大震度…${rawData.MaxIntensity}`,
+                        `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`,
+                        `深さ…${depthNormalizer(rawData.Depth)}`,
+                    ].join('\n')
+                )
+                .setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
+                .setFooter({ text: `情報源:${rawData.Issue.Source}` })
+                .setTimestamp(new Date(rawData.AnnouncedTime))
     }
+    sendEEWInfo(embed)
 })
