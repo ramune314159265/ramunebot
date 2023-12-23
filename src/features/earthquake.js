@@ -6,9 +6,9 @@ const { quakeScales,
     depthNormalizer
 } = require('../util/earthquake')
 const { WebSocket } = require('ws');
-const ws = new WebSocket('wss://api-realtime-sandbox.p2pquake.net/v2/ws')
+const p2pQuakeWs = new WebSocket('wss://api-realtime-sandbox.p2pquake.net/v2/ws')
 
-ws.addEventListener('message', (message) => {
+p2pQuakeWs.addEventListener('message', (message) => {
     const rawData = JSON.parse(message.data)
     console.log(rawData)
 
