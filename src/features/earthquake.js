@@ -2,6 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const { createLocalStorage } = require('localstorage-ponyfill');
 const {
     quakeScales,
+    quakeScalesByName,
     domesticTsunamiInfos,
     magnitudeNormalizer,
     depthNormalizer,
@@ -37,9 +38,7 @@ p2pQuakeWs.addEventListener('message', (message) => {
                     [
                         `震源…${rawData.earthquake.hypocenter.name}`,
                         `最大震度…${quakeScales[rawData.earthquake.maxScale].name}`,
-                        `地震規模…${magnitudeNormalizer(
-                            rawData.earthquake.hypocenter.magnitude,
-                        )}`,
+                        `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
                         `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
                         `津波…${domesticTsunamiInfos[rawData.earthquake.domesticTsunami]}`,
                     ].join('\n'),
@@ -48,6 +47,8 @@ p2pQuakeWs.addEventListener('message', (message) => {
                 .setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
                 .setFooter({ text: `情報源:${rawData.issue.source},${rawData._id}` })
                 .setTimestamp(new Date(rawData.earthquake.time));
+
+            sendEEWInfo(embed);
             break;
         case 554:
             embed
@@ -55,12 +56,16 @@ p2pQuakeWs.addEventListener('message', (message) => {
                 .setDescription('地震を検出しました')
                 .setColor('Red')
                 .setTimestamp(new Date(rawData.time));
+
+            sendEEWInfo(embed);
         case 556 && rawData.cancelled:
             embed
                 .setTitle('緊急地震速報(取り消し)')
                 .setDescription('緊急地震速報はキャンセルされました')
                 .setColor('Green')
                 .setTimestamp(new Date(rawData.time));
+
+            sendEEWInfo(embed);
             break;
         case 556:
             embed
@@ -68,20 +73,18 @@ p2pQuakeWs.addEventListener('message', (message) => {
                 .setDescription(
                     [
                         `震源…${rawData.earthquake.hypocenter.name}(${rawData.earthquake.condition})`,
-                        `地震規模…${magnitudeNormalizer(
-                            rawData.earthquake.hypocenter.magnitude,
-                        )}`,
+                        `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
                         `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
                     ].join('\n'),
                 )
                 .setColor('Red')
                 .setFooter({ text: `${rawData.eventId}` })
                 .setTimestamp(new Date(rawData.earthquake.originTime));
+
+            sendEEWInfo(embed);
         default:
             break;
     }
-
-    sendEEWInfo(embed);
 });
 
 wolfxWs.addEventListener('message', (message) => {
@@ -96,18 +99,32 @@ wolfxWs.addEventListener('message', (message) => {
     const { client } = require('../index');
     client.channels.cache.get('974599935053942815').send(message.data);
 
-    embed
-        .setTitle('緊急地震速報(予報)')
-        .setDescription(
-            [
-                `震源…${rawData.Hypocenter}`,
-                `最大震度…${rawData.MaxIntensity}`,
-                `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`,
-                `深さ…${depthNormalizer(rawData.Depth)}`,
-            ].join('\n'),
-        )
-        .setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
-        .setTimestamp(rawData.AnnouncedTime);
+    switch (true) {
+        case rawData.isCancel:
+            embed
+                .setTitle('キャンセル - 緊急地震速報(予報)')
+                .setDescription('緊急地震速報はキャンセルされました')
+                .setColor('Green')
 
-    sendEEWInfo(embed);
+            sendEEWInfo(embed);
+            break;
+
+        default:
+            embed
+                .setTitle(rawData.isFinal ? '最終報 - 緊急地震速報(予報)' : `第${rawData.Serial}報 - 緊急地震速報(予報)`)
+                .setDescription(
+                    [
+                        `震源…${rawData.Hypocenter}${isSea ? '(海上)' : ''}`,
+                        `最大震度…${rawData.MaxIntensity}(${rawData.isAssumption ? 'PLUM法による仮定震源要素' : ''})`,
+                        `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`, //Magunitude APIのタイポ
+                        `深さ…${depthNormalizer(rawData.Depth)}`,
+                    ].join('\n'),
+                )
+                .setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
+                .setColor(quakeScalesByName[rawData.MaxIntensity]?.hexColor ?? 'White')
+                .setTimestamp(rawData.OriginTime);
+
+            sendEEWInfo(embed);
+            break;
+    }
 });

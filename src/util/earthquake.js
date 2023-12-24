@@ -62,6 +62,59 @@ const quakeScales = {
     }
 }
 
+const quakeScalesByName = {
+    '不明': {
+        level: -1,
+        ansiColor: '',
+        hexColor: '#FFFFFF'
+    },
+    '1': {
+        level: 1,
+        ansiColor: '[0;30m',
+        hexColor: '#3C5A82'
+    },
+    '2': {
+        level: 2,
+        ansiColor: '[0;34m',
+        hexColor: '#1E82E6'
+    },
+    '3': {
+        level: 3,
+        ansiColor: '[0;32m',
+        hexColor: '#78E6DC'
+    },
+    '4': {
+        level: 4,
+        ansiColor: '[0;33m',
+        hexColor: '#FFFF96'
+    },
+    '5弱': {
+        level: 5,
+        ansiColor: '[0;35m',
+        hexColor: '#FFD200'
+    },
+    '5強': {
+        level: 6,
+        ansiColor: '[0;35m',
+        hexColor: '#FF9600'
+    },
+    '6弱': {
+        level: 7,
+        ansiColor: '[0;31m',
+        hexColor: '#F03200'
+    },
+    '6強': {
+        level: 8,
+        ansiColor: '[0;31m',
+        hexColor: '#BE0000'
+    },
+    '7': {
+        level: 9,
+        ansiColor: '[37;1;41m',
+        hexColor: '#8C0028'
+    }
+}
+
 const TsunamiScales = {
     MajorWarning: '大津波警報!',
     Warning: '津波警報!',
@@ -122,6 +175,7 @@ const depthNormalizer = (depth) => {
 }
 
 module.exports.quakeScales = quakeScales
+module.exports.quakeScalesByName = quakeScalesByName
 module.exports.TsunamiScales = TsunamiScales
 module.exports.domesticTsunamiInfos = domesticTsunamiInfos
 module.exports.foreignTsunamiInfos = foreignTsunamiInfos
