@@ -11,6 +11,7 @@ const p2pQuakeWs = new WebSocket('wss://api.p2pquake.net/v2/ws');
 const wolfxWs = new WebSocket('wss://ws-api.wolfx.jp/jma_eew');
 
 const sendEEWInfo = (embed) => {
+    console.log('send');
     const localStorage = createLocalStorage();
     const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'));
 
