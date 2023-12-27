@@ -154,22 +154,22 @@ const quakeInfoTypes = {
 }
 
 /**
- * マグニチュードデータで-1だったら情報なしと返し、それ以外にはMを付ける
+ * マグニチュードデータで-1だったら不明と返し、それ以外にはMを付ける
  * @param {number} magnitude - マグニチュードデータ
  * @returns {string} - 正規化した結果
  */
 const magnitudeNormalizer = (magnitude) => {
-    if (magnitude === -1) return '情報なし'
+    if (magnitude === -1) return '不明'
     return `M${magnitude}`
 }
 
 /**
- * 震源の深さで-1だったら情報なし、0だったらごく浅いと返し、それ以外には単位を付ける
+ * 震源の深さで-1だったら不明、0だったらごく浅いと返し、それ以外には単位を付ける
  * @param {number} magnitude - 深さ
  * @returns {string} - 正規化した結果
  */
 const depthNormalizer = (depth) => {
-    if (depth === -1) return '情報なし'
+    if (depth === -1) return '不明'
     if (depth === 0) return 'ごく浅い'
     return `${depth}km`
 }
