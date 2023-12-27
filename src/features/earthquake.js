@@ -58,7 +58,7 @@ p2pQuakeWs.addEventListener('message', (message) => {
                 .setTimestamp(new Date(rawData.time));
 
             sendEEWInfo(embed);
-        case 556 && rawData.cancelled:
+        case (556 && rawData.cancelled):
             embed
                 .setTitle('キャンセル - 緊急地震速報(予報)')
                 .setDescription('緊急地震速報はキャンセルされました')
