@@ -113,7 +113,7 @@ wolfxWs.addEventListener('message', (message) => {
                 .setTitle(`${rawData.isFinal ? '最終報' : `第${rawData.Serial}報`} - 緊急地震速報(予報)`)
                 .setDescription(
                     [
-                        `震源…${rawData.Hypocenter ?? '不明'}${isSea ? '(海上)' : ''}`,
+                        `震源…${rawData.Hypocenter ?? '不明'}${rawData.isSea ? '(海上)' : ''}`,
                         `最大震度…${rawData.MaxIntensity}(${rawData.isAssumption ? '仮定震源要素' : ''})`,
                         `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`, //Magunitude APIのタイポ
                         `深さ…${depthNormalizer(rawData.Depth)}`,
