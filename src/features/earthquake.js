@@ -111,7 +111,7 @@ wolfxWs.addEventListener('message', (message) => {
 
         default:
             embed
-                .setTitle(rawData.isFinal ? '最終報 - 緊急地震速報(予報)' : `第${rawData.Serial}報 - 緊急地震速報(予報)`)
+                .setTitle(`${rawData.isFinal ? '最終報' : `第${rawData.Serial}報`} - 緊急地震速報(予報)`)
                 .setDescription(
                     [
                         `震源…${rawData.Hypocenter ?? '不明'}${isSea ? '(海上)' : ''}`,
