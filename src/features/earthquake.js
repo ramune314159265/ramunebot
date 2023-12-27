@@ -94,10 +94,10 @@ wolfxWs.addEventListener('message', (message) => {
         return;
     }
 
-    const embed = new EmbedBuilder();
-
     const { client } = require('../index');
     client.channels.cache.get('974599935053942815').send(message.data);
+
+    const embed = new EmbedBuilder();
 
     switch (true) {
         case rawData.isCancel:
@@ -108,7 +108,6 @@ wolfxWs.addEventListener('message', (message) => {
 
             sendEEWInfo(embed);
             break;
-
         default:
             embed
                 .setTitle(`${rawData.isFinal ? '最終報' : `第${rawData.Serial}報`} - 緊急地震速報(予報)`)
