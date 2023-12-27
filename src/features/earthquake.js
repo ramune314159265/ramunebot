@@ -60,7 +60,7 @@ p2pQuakeWs.addEventListener('message', (message) => {
             sendEEWInfo(embed);
         case 556 && rawData.cancelled:
             embed
-                .setTitle('緊急地震速報(取り消し)')
+                .setTitle('キャンセル - 緊急地震速報(予報)')
                 .setDescription('緊急地震速報はキャンセルされました')
                 .setColor('Green')
                 .setTimestamp(new Date(rawData.time));
@@ -69,10 +69,10 @@ p2pQuakeWs.addEventListener('message', (message) => {
             break;
         case 556:
             embed
-                .setTitle('緊急地震速報(警報)')
+                .setTitle(`第${rawData.issue.serial}報 - 緊急地震速報(警報)`)
                 .setDescription(
                     [
-                        `震源…${rawData.earthquake.hypocenter.name}(${rawData.earthquake.condition})`,
+                        `震源…${rawData.earthquake.hypocenter.name}`,
                         `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
                         `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
                     ].join('\n'),
@@ -115,7 +115,7 @@ wolfxWs.addEventListener('message', (message) => {
                 .setDescription(
                     [
                         `震源…${rawData.Hypocenter}${isSea ? '(海上)' : ''}`,
-                        `最大震度…${rawData.MaxIntensity}(${rawData.isAssumption ? 'PLUM法による仮定震源要素' : ''})`,
+                        `最大震度…${rawData.MaxIntensity}(${rawData.isAssumption ? '仮定震源要素' : ''})`,
                         `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`, //Magunitude APIのタイポ
                         `深さ…${depthNormalizer(rawData.Depth)}`,
                     ].join('\n'),
