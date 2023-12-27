@@ -90,7 +90,7 @@ p2pQuakeWs.addEventListener('message', (message) => {
 wolfxWs.addEventListener('message', (message) => {
     const rawData = JSON.parse(message.data);
     console.log(rawData);
-    if (!(rawData.type === 'jma_eew')) {
+    if (rawData.type !== 'jma_eew') {
         return;
     }
 
