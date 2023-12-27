@@ -72,7 +72,7 @@ p2pQuakeWs.addEventListener('message', (message) => {
                 .setTitle(`第${rawData.issue.serial}報 - 緊急地震速報(警報)`)
                 .setDescription(
                     [
-                        `震源…${rawData.earthquake.hypocenter.name}`,
+                        `震源…${rawData.earthquake.hypocenter.name ?? '不明'}`,
                         `地震規模…${magnitudeNormalizer(rawData.earthquake.hypocenter.magnitude)}`,
                         `深さ…${depthNormalizer(rawData.earthquake.hypocenter.depth)}`,
                     ].join('\n'),
