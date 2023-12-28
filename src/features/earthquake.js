@@ -114,7 +114,7 @@ wolfxWs.addEventListener('message', (message) => {
                 .setDescription(
                     [
                         `震源…${rawData.Hypocenter ?? '不明'}${rawData.isSea ? '(海上)' : ''}`,
-                        `最大震度…${rawData.MaxIntensity}(${rawData.isAssumption ? '仮定震源要素' : ''})`,
+                        `最大震度…${rawData.MaxIntensity}${rawData.isAssumption ? '(仮定震源要素)' : ''}`,
                         `地震規模…${magnitudeNormalizer(rawData.Magunitude)}`, //Magunitude APIのタイポ
                         `深さ…${depthNormalizer(rawData.Depth)}`,
                     ].join('\n'),
