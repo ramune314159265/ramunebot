@@ -5,3 +5,5 @@ const toHankakuAlphabet = string => {
         })
         .replaceAll("　"," ")
 }
+
+module.exports.toHankakuAlphabet = toHankakuAlphabet
