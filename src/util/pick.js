@@ -13,12 +13,12 @@
  * @returns {array} - 結果が戻る
  */
 const pick = (array, index, maximum) => {
-    const length = array.length
-    if (maximum >= length) return array
-    const start = index - Math.ceil(maximum / 2)
-    const offset = (start < 0) ? Math.abs(start) : 0
-    const pickedResult = array.slice(index - Math.ceil(maximum / 2) + offset, index + Math.floor(maximum / 2) + offset)
-    return pickedResult
+	const length = array.length
+	if (maximum >= length) return array
+	const start = index - Math.ceil(maximum / 2)
+	const offset = (start < 0) ? Math.abs(start) : 0
+	const pickedResult = array.slice(index - Math.ceil(maximum / 2) + offset, index + Math.floor(maximum / 2) + offset)
+	return pickedResult
 }
 
 module.exports = pick
