@@ -74,6 +74,32 @@ module.exports = {
 				]
 			}, {
 				type: ApplicationCommandOptionType.Subcommand,
+				name: "bigdice",
+				description: "巨大な数のダイスを触れます xDyの形式でしか振れません",
+				options: [
+					{
+						type: ApplicationCommandOptionType.Integer,
+						name: "x",
+						description: "ダイスの個数 xDyのxの部分",
+						required: true,
+					},{
+						type: ApplicationCommandOptionType.Integer,
+						name: "y",
+						description: "ダイスの面数 xDyのyの部分",
+						required: true,
+					}, {
+						type: ApplicationCommandOptionType.String,
+						name: "messagetype",
+						description: "送信メッセージのタイプを指定します",
+						required: false,
+						choices: [
+							{ name: "一時的メッセージ(自分のみ)", value: "ephemeral" },
+							{ name: "通常メッセージ(デフォルト)", value: "message" },
+						]
+					}
+				]
+			}, {
+				type: ApplicationCommandOptionType.Subcommand,
 				name: "dicetable",
 				description: "ダイステーブル表を実行します",
 			},
