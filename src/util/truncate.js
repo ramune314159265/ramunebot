@@ -17,6 +17,6 @@ const truncate = (string, maxLength, ellipsis) => {
     return (ellipsis
         ? subString.slice(0, subString.lastIndexOf(" "))
         : subString) + '…'
-};
+}
 
 module.exports.truncate = truncate
