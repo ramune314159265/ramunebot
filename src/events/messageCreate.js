@@ -3,6 +3,7 @@ const {
 } = require('discord.js');
 
 const { DynamicLoader, Version } = require('bcdice');
+const { toHankakuAlphabet } = require('../util/toHankaku');
 const mainLoader = new DynamicLoader();
 let defaultGameSystem
 (async () => {
@@ -22,8 +23,8 @@ module.exports.execute = async message => {
 		}
 	}
 	//ダイスコマンドか
-	if (message.content.match(defaultGameSystem.COMMAND_PATTERN)) {
-		const result = defaultGameSystem.eval(message.content)
+	if (toHankakuAlphabet(message.content).match(defaultGameSystem.COMMAND_PATTERN)) {
+		const result = defaultGameSystem.eval(toHankakuAlphabet(message.content))
 		message.reply(result.text)
 	}
 	if (message.content === "qd" && client.quickDice?.[message.author.id]) {
