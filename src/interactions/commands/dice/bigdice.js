@@ -11,7 +11,7 @@ module.exports.execute = async interaction => {
     const diceCount = interaction.options.getInteger('x')
     const diceSides = interaction.options.getInteger('y')
 
-    if ((diceCount * diceSides) > Number.MAX_SAFE_INTEGER) {
+    if (Number.isSafeInteger(diceCount * diceSides)) {
         interaction.reply({
             content: `数字が大きすぎます。最大値が${Number.MAX_SAFE_INTEGER}以下になるようにしてください。`,
             ephemeral: true
