@@ -1,5 +1,6 @@
 const {
-    Events
+	Events,
+	messageLink
 } = require('discord.js');
 
 const { DynamicLoader, Version } = require('bcdice');
@@ -24,7 +25,14 @@ module.exports.execute = async message => {
 	}
 	//ダイスコマンドか
 	if (toHankakuAlphabet(message.content).match(defaultGameSystem.COMMAND_PATTERN)) {
-		const result = defaultGameSystem.eval(toHankakuAlphabet(message.content))
+		const diceCommand = toHankakuAlphabet(message.content)
+		const result = defaultGameSystem.eval(diceCommand)
+
+		if (result.secret) {
+			message.reply('**Secret Dice** 🎲')
+			message.author.send(`${messageLink(message.channelId, message.id)}\n${result.text}`)
+			return
+		}
 		message.reply(result.text)
 	}
 	if (message.content === "qd" && client.quickDice?.[message.author.id]) {
