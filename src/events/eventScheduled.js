@@ -2,7 +2,7 @@ const {
 	Events
 } = require('discord.js');
 
-const {client} = require('..')
+const { client } = require('..')
 
 module.exports.name = Events.GuildScheduledEventCreate
 module.exports.execute = async event => {
