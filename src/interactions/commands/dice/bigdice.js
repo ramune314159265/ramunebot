@@ -4,7 +4,7 @@ const { ButtonStyle,
     ComponentType,
     blockQuote
 } = require('discord.js');
-const { randomRangeInt } = require('../../../util/randomRange')
+const { randomRangeInt } = require('../../../util/random')
 const { truncate } = require('../../../util/truncate')
 
 module.exports.execute = async interaction => {
