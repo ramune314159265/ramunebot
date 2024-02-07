@@ -27,18 +27,18 @@ module.exports.execute = async message => {
 	if (toHankakuAlphabet(message.content).match(defaultGameSystem.COMMAND_PATTERN)) {
 		const diceCommand = toHankakuAlphabet(message.content)
 		const result = defaultGameSystem.eval(diceCommand)
-
 		if (result.secret) {
 			message.reply('**Secret Dice** 🎲')
 			message.author.send(`${messageLink(message.channelId, message.id)}\n${result.text}`)
 			return
 		}
+
 		message.reply(result.text)
 	}
 	if (message.content === "qd" && client.quickDice?.[message.author.id]) {
 		const loader = new DynamicLoader();
 		const gameSystem = await loader.dynamicLoad(client.quickDice[message.author.id].gameSystem);
-		console.log(gameSystem)
+
 		try {
 			const result = gameSystem.eval(client.quickDice[message.author.id].cmd)
 			message.reply(result.text)
