@@ -8,14 +8,14 @@ module.exports.execute = async (interaction) => {
 	switch (interaction.type) {
 		case InteractionType.ApplicationCommand: {
 			const { commands } = require('../interactions/index');
+			const commandData = commands[interaction.commandName];
 
-			const commandInfo = commands[interaction.commandName];
 			try {
 				if (interaction.options.getSubcommand(false)) {
 					require(`../interactions/commands/${interaction.commandName}/${interaction.options.getSubcommand()}`).execute(interaction)
 					return
 				}
-				await commandInfo.execute(interaction);
+				await commandData.execute(interaction);
 			} catch (e) {
 				console.error(e)
 				await interaction.reply({
