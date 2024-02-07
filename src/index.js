@@ -34,6 +34,7 @@ const client = new Client({
 			type: ActivityType.Playing,
 			name: '起動処理中'
 		}],
+		status: 'dnd'
 	},
 });
 
