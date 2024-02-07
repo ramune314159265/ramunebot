@@ -32,7 +32,7 @@ const client = new Client({
 	presence: {
 		activities: [{
 			type: ActivityType.Playing,
-			name: 'コマンド'
+			name: '起動処理中'
 		}],
 	},
 });
