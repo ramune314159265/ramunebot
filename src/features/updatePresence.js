@@ -9,5 +9,5 @@ const updatePresence = () => {
     client.user.setActivity(`${client.ws.ping === -1 ? '不明' : client.ws.ping}ms | ${randomFromArray(presenceMessages)}`, { type: ActivityType.Playing })
 }
 
-setInterval(updatePresence, 5 * 60 * 1000)
+setInterval(updatePresence, 30 * 60 * 1000)
 updatePresence()
