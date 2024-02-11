@@ -60,7 +60,7 @@ module.exports.execute = async interaction => {
 
 	if (!channel) {
 		interaction.editReply({
-			content: "接続先のボイスチャンネルが見つかりません。",
+			content: '接続先のボイスチャンネルが見つかりません。',
 			ephemeral: true,
 		});
 		return

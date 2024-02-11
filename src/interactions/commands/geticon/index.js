@@ -1,28 +1,28 @@
 const { ApplicationCommandOptionType } = require('discord.js');
 module.exports = {
 	data: {
-		name: "geticon",
-		description: "指定したユーザーのアイコンを取得します",
+		name: 'geticon',
+		description: '指定したユーザーのアイコンを取得します',
 		options: [
 			{
 				type: ApplicationCommandOptionType.User,
-				name: "user",
-				description: "ユーザーを指定",
+				name: 'user',
+				description: 'ユーザーを指定',
 			},
 		]
 	},
 	async execute(interaction) {
-		const user = interaction.options.getUser("user")
+		const user = interaction.options.getUser('user')
 		if (!user) {
 			return interaction.reply({
-				content: "ユーザーを取得できませんでした",
+				content: 'ユーザーを取得できませんでした',
 				ephemeral: true
 			})
 		}
 		const iconURL = user.displayAvatarURL({ extension: 'png' })
 		if (!iconURL) {
 			return interaction.reply({
-				content: "アイコンを取得できませんでした",
+				content: 'アイコンを取得できませんでした',
 				ephemeral: true
 			})
 		}

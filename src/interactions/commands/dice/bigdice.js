@@ -35,7 +35,7 @@ module.exports.execute = async interaction => {
                 .addComponents(new ButtonBuilder()
                     .setCustomId('next')
                     .setStyle(ButtonStyle.Primary)
-                    .setLabel("出目を表示")
+                    .setLabel('出目を表示')
                     .setEmoji('🎲')
                 )
         ]

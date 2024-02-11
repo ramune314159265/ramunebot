@@ -1,8 +1,8 @@
 const { ApplicationCommandType } = require('discord.js');
 module.exports = {
 	data: {
-		name: "Zalgo",
-		description: "",
+		name: 'Zalgo',
+		description: '',
 		type: ApplicationCommandType.Message
 	},
 	async execute(interaction) {

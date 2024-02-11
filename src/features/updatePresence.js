@@ -1,6 +1,6 @@
-const { ActivityType, Status } = require("discord.js");
-const { client } = require("..");
-const { randomFromArray } = require("../util/random")
+const { ActivityType, Status } = require('discord.js');
+const { client } = require('..');
+const { randomFromArray } = require('../util/random')
 
 const presenceMessages = ['スラッシュコマンド', 'ダイス']
 

@@ -5,8 +5,8 @@ const { quakeScales } = require('../../../util/earthquake')
 
 module.exports = {
 	data: {
-		name: "earthquake",
-		description: "地震情報を表示",
+		name: 'earthquake',
+		description: '地震情報を表示',
 	},
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true })

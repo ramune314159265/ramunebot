@@ -15,7 +15,7 @@ const truncate = (string, maxLength, ellipsis) => {
     }
     const subString = string.slice(0, maxLength - 1)
     return (ellipsis
-        ? subString.slice(0, subString.lastIndexOf(" "))
+        ? subString.slice(0, subString.lastIndexOf(' '))
         : subString) + '…'
 }
 
