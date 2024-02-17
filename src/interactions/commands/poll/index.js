@@ -1,4 +1,4 @@
-const { EmbedBuilder ,ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder ,ApplicationCommandOptionType } = require('discord.js')
 module.exports = {
 	data: {
 		name: "poll",
@@ -36,8 +36,8 @@ module.exports = {
 			await interaction.reply({
 				content:'選択肢を2つ以上入れてください',
 				ephemeral: true
-			});
-			return false;
+			})
+			return false
 		}
 		const embed = new EmbedBuilder()
 			.setTitle(interaction.options.getString('title'))
@@ -47,7 +47,7 @@ module.exports = {
 			content: `<@${interaction.user.id}>が${interaction.options.getString('type')}を開始しました`,
 			embeds: [embed]
 		})
-		const msg = await interaction.fetchReply();
+		const msg = await interaction.fetchReply()
 		emojis.slice(0, choices.length).forEach(emoji => msg.react(emoji))
 	}
 }

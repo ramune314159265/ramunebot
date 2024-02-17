@@ -2,8 +2,7 @@ const { ButtonStyle,
     ButtonBuilder,
     ActionRowBuilder,
     ComponentType,
-    blockQuote
-} = require('discord.js');
+} = require('discord.js')
 const { randomRangeInt } = require('../../../util/random')
 const { truncate } = require('../../../util/truncate')
 
@@ -23,7 +22,7 @@ module.exports.execute = async interaction => {
 
     const diceResults = new Array(diceCount)
         .fill(0)
-        .map(i => randomRangeInt(1, diceSides))
+        .map(() => randomRangeInt(1, diceSides))
 
     const total = diceResults.reduce((previous, current) => previous + current)
 
@@ -41,7 +40,7 @@ module.exports.execute = async interaction => {
         ]
     })
 
-    const collector = await message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 12 * 60 * 60 * 1000 /*12時間*/ });
+    const collector = await message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 12 * 60 * 60 * 1000 /*12時間*/ })
 
     collector.on('collect', collectorInteraction => {
         collectorInteraction.update({

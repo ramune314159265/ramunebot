@@ -2,15 +2,15 @@ const { AudioPlayerStatus,
 	createAudioPlayer,
 	joinVoiceChannel,
 	NoSubscriberBehavior
-} = require('@discordjs/voice');
+} = require('@discordjs/voice')
 const { ButtonStyle,
 	ButtonBuilder,
 	ActionRowBuilder,
 	ComponentType
-} = require('discord.js');
-const ytdl = require('ytdl-core');
-const wait = require('util').promisify(setTimeout);
-const getResource = require('../../../util/getYoutubeResource');
+} = require('discord.js')
+const ytdl = require('ytdl-core')
+const wait = require('util').promisify(setTimeout)
+const getResource = require('../../../util/getYoutubeResource')
 
 const controlButtons = {
 	stop: new ButtonBuilder()
@@ -34,14 +34,14 @@ module.exports.execute = async interaction => {
 	await interaction.deferReply({ ephemeral: interaction.options.getString('messagetype') === 'message' ? false : true })
 	const playAudioUrl = interaction.options.getString('url')
 	let isLoop = interaction.options.getString('loop') === "true" ? true : false
-	const member = interaction.member;
-	const channel = member.voice.channel;
+	const member = interaction.member
+	const channel = member.voice.channel
 
 	if (!channel) {
 		interaction.editReply({
 			content: "接続先のボイスチャンネルが見つかりません。",
 			ephemeral: true,
-		});
+		})
 		return
 	}
 	const connection = joinVoiceChannel({
@@ -50,13 +50,13 @@ module.exports.execute = async interaction => {
 		guildId: channel.guild.id,
 		selfDeaf: true,
 		selfMute: false,
-	});
+	})
 	const player = createAudioPlayer({
 		behaviors: {
 			noSubscriber: NoSubscriberBehavior.Pause,
 		},
-	});
-	const connectionSubscribe = connection.subscribe(player);
+	})
+	const connectionSubscribe = connection.subscribe(player)
 
 	const resource = getResource(ytdl.getURLVideoID(playAudioUrl))
 
@@ -70,7 +70,7 @@ module.exports.execute = async interaction => {
 			player.play(resource)
 			return
 		}
-		interaction.editReply({ content: `${playAudioUrl}を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [] });
+		interaction.editReply({ content: `${playAudioUrl}を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [] })
 		connectionSubscribe.unsubscribe()
 		connection.destroy()
 	})
@@ -82,9 +82,9 @@ module.exports.execute = async interaction => {
 			new ActionRowBuilder()
 				.addComponents(controlButtons.stop, controlButtons.pause)
 		]
-	});
+	})
 
-	const collector = await message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 12 * 60 * 60 * 1000 /*12時間*/ });
+	const collector = await message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 12 * 60 * 60 * 1000 /*12時間*/ })
 
 	collector.on('collect', collectorInteraction => {
 		const interactionData = JSON.parse(collectorInteraction.customId)
@@ -100,7 +100,7 @@ module.exports.execute = async interaction => {
 						ephemeral: true,
 						components: []
 					})
-					break;
+					break
 				case 'pause':
 					player.pause()
 					collectorInteraction.update({
@@ -111,7 +111,7 @@ module.exports.execute = async interaction => {
 								.addComponents(controlButtons.stop, controlButtons.play)
 						]
 					})
-					break;
+					break
 				case 'play':
 					player.unpause()
 					collectorInteraction.update({
@@ -122,8 +122,9 @@ module.exports.execute = async interaction => {
 								.addComponents(controlButtons.stop, controlButtons.pause)
 						]
 					})
+					break
 				default:
-					break;
+					break
 			}
 		} catch (e) {
 			collectorInteraction.reply({
@@ -131,5 +132,5 @@ module.exports.execute = async interaction => {
 				ephemeral: true
 			})
 		}
-	});
+	})
 }

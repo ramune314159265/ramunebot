@@ -1,32 +1,32 @@
-const { EmbedBuilder } = require('discord.js');
-const { createLocalStorage } = require('localstorage-ponyfill');
+const { EmbedBuilder } = require('discord.js')
+const { createLocalStorage } = require('localstorage-ponyfill')
 const {
 	quakeScales,
 	quakeScalesByName,
 	domesticTsunamiInfos,
 	magnitudeNormalizer,
 	depthNormalizer,
-} = require('../util/earthquake');
-const { WebSocket } = require('ws');
-const p2pQuakeWs = new WebSocket('wss://api.p2pquake.net/v2/ws');
-const wolfxWs = new WebSocket('wss://ws-api.wolfx.jp/jma_eew');
+} = require('../util/earthquake')
+const { WebSocket } = require('ws')
+const p2pQuakeWs = new WebSocket('wss://api.p2pquake.net/v2/ws')
+const wolfxWs = new WebSocket('wss://ws-api.wolfx.jp/jma_eew')
 
 const sendEEWInfo = (embed) => {
-	const localStorage = createLocalStorage();
-	const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'));
+	const localStorage = createLocalStorage()
+	const noticeChannels = JSON.parse(localStorage.getItem('eewChannels'))
 
-	const { client } = require('../index');
-	for (const [key, value] of Object.entries(noticeChannels)) {
+	const { client } = require('../index')
+	for (const value of Object.values(noticeChannels)) {
 		client.channels.cache.get(value).send({
 			embeds: [embed],
-		});
+		})
 	}
-};
+}
 
 p2pQuakeWs.addEventListener('message', (message) => {
-	const rawData = JSON.parse(message.data);
+	const rawData = JSON.parse(message.data)
 
-	const embed = new EmbedBuilder();
+	const embed = new EmbedBuilder()
 
 	switch (rawData.code) {
 		//地震情報
@@ -45,27 +45,28 @@ p2pQuakeWs.addEventListener('message', (message) => {
 				.setColor(quakeScales[rawData.earthquake.maxScale].hexColor ?? 'White')
 				.setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
 				.setFooter({ text: `情報源:${rawData.issue.source},${rawData._id}` })
-				.setTimestamp(new Date(rawData.earthquake.time));
+				.setTimestamp(new Date(rawData.earthquake.time))
 
-			sendEEWInfo(embed);
-			break;
+			sendEEWInfo(embed)
+			break
 		case 554:
 			embed
 				.setTitle('緊急地震速報!')
 				.setDescription('地震を検出しました')
 				.setColor('Red')
-				.setTimestamp(new Date(rawData.time));
+				.setTimestamp(new Date(rawData.time))
 
-			sendEEWInfo(embed);
+			sendEEWInfo(embed)
+			break
 		case (556 && rawData.cancelled):
 			embed
 				.setTitle('キャンセル - 緊急地震速報(予報)')
 				.setDescription('緊急地震速報はキャンセルされました')
 				.setColor('Green')
-				.setTimestamp(new Date(rawData.time));
+				.setTimestamp(new Date(rawData.time))
 
-			sendEEWInfo(embed);
-			break;
+			sendEEWInfo(embed)
+			break
 		case 556:
 			embed
 				.setTitle(`第${rawData.issue.serial}報 - 緊急地震速報(警報)`)
@@ -78,21 +79,22 @@ p2pQuakeWs.addEventListener('message', (message) => {
 				)
 				.setColor('Red')
 				.setFooter({ text: `${rawData.eventId}` })
-				.setTimestamp(new Date(rawData.earthquake.originTime));
+				.setTimestamp(new Date(rawData.earthquake.originTime))
 
-			sendEEWInfo(embed);
+			sendEEWInfo(embed)
+			break
 		default:
-			break;
+			break
 	}
-});
+})
 
 wolfxWs.addEventListener('message', (message) => {
-	const rawData = JSON.parse(message.data);
+	const rawData = JSON.parse(message.data)
 	if (rawData.type !== 'jma_eew') {
-		return;
+		return
 	}
 
-	const embed = new EmbedBuilder();
+	const embed = new EmbedBuilder()
 
 	switch (true) {
 		case rawData.isCancel:
@@ -101,8 +103,8 @@ wolfxWs.addEventListener('message', (message) => {
 				.setDescription('緊急地震速報はキャンセルされました')
 				.setColor('Green')
 
-			sendEEWInfo(embed);
-			break;
+			sendEEWInfo(embed)
+			break
 		default:
 			embed
 				.setTitle(`${rawData.isFinal ? '最終報' : `第${rawData.Serial}報`} - 緊急地震速報(予報)`)
@@ -116,9 +118,9 @@ wolfxWs.addEventListener('message', (message) => {
 				)
 				.setURL('https://www.jma.go.jp/bosai/map.html?contents=earthquake_map')
 				.setColor(quakeScalesByName[rawData.MaxIntensity]?.hexColor ?? 'White')
-				.setTimestamp(rawData.OriginTime);
+				.setTimestamp(rawData.OriginTime)
 
-			sendEEWInfo(embed);
-			break;
+			sendEEWInfo(embed)
+			break
 	}
-});
+})

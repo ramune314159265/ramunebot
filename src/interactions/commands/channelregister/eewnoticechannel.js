@@ -1,8 +1,8 @@
-const { createLocalStorage } = require("localstorage-ponyfill");
+const { createLocalStorage } = require("localstorage-ponyfill")
 const { channelMention } = require('discord.js')
 
 module.exports.execute = async interaction => {
-	const localStorage = createLocalStorage();
+	const localStorage = createLocalStorage()
 	const eewChannels = JSON.parse(localStorage.getItem('eewChannels')) ?? {}
 
 	const channel = interaction.options.getChannel('channel')

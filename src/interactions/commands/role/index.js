@@ -1,5 +1,4 @@
-const { ActionRowBuilder, StringSelectMenuBuilder, ComponentType, EmbedBuilder, roleMention } = require('discord.js');
-const { json } = require('express');
+const { ActionRowBuilder, StringSelectMenuBuilder, ComponentType, EmbedBuilder, roleMention } = require('discord.js')
 module.exports = {
 	data: {
 		name: "role",
@@ -46,7 +45,7 @@ module.exports = {
 					.setDescription(`:arrow_right: `)
 			]
 		})
-		const collector = await msg.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 5 * 60 * 1000 /*5分*/ });
+		const collector = await msg.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 5 * 60 * 1000 /*5分*/ })
 		collector.on('collect', selectMenuInteraction => {
 			const id = JSON.parse(selectMenuInteraction.customId)
 			if (!id.type === 'role') return

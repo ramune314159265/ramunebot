@@ -1,21 +1,21 @@
 const {
 	Events,
 	InteractionType
-} = require('discord.js');
+} = require('discord.js')
 
 module.exports.name = Events.InteractionCreate
 module.exports.execute = async (interaction) => {
 	switch (interaction.type) {
 		case InteractionType.ApplicationCommand: {
-			const { commands } = require('../interactions/index');
-			const commandData = commands[interaction.commandName];
+			const { commands } = require('../interactions/index')
+			const commandData = commands[interaction.commandName]
 
 			try {
 				if (interaction.options.getSubcommand(false)) {
 					require(`../interactions/commands/${interaction.commandName}/${interaction.options.getSubcommand()}`).execute(interaction)
 					return
 				}
-				await commandData.execute(interaction);
+				await commandData.execute(interaction)
 			} catch (e) {
 				console.error(e)
 				await interaction.reply({
@@ -23,16 +23,16 @@ module.exports.execute = async (interaction) => {
 					ephemeral: true,
 				})
 			}
-			break;
+			break
 		}
 		case InteractionType.ApplicationCommandAutocomplete: {
 			try {
-				const focusedOption = interaction.options.getFocused(true);
+				const focusedOption = interaction.options.getFocused(true)
 				require(`../interactions/autocomplete/${focusedOption.name}`).execute(interaction)
 			} catch (e) {
 				console.error(e)
 			}
-			break;
+			break
 		}
 		case InteractionType.MessageComponent: {
 			try {
@@ -40,7 +40,7 @@ module.exports.execute = async (interaction) => {
 			} catch (e) {
 				console.error(e)
 			}
-			break;
+			break
 		}
 		case InteractionType.ModalSubmit: {
 			try {
@@ -48,7 +48,7 @@ module.exports.execute = async (interaction) => {
 			} catch (e) {
 				console.error(e)
 			}
-			break;
+			break
 		}
 	}
 }

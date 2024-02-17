@@ -1,8 +1,8 @@
 const {
 	Events
-} = require('discord.js');
-const fs = require('fs');
-const path = require('path');
+} = require('discord.js')
+const fs = require('fs')
+const path = require('path')
 
 module.exports.name = Events.ClientReady
 module.exports.execute = () => {

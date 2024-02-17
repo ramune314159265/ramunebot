@@ -1,17 +1,17 @@
-const http = require("http");
+const http = require("http")
 http.createServer(function (request, response) {
-	response.writeHead(200, { "Access-Control-Allow-Origin": "*" });
-	response.end('OK');
-}).listen(8000);
+	response.writeHead(200, { "Access-Control-Allow-Origin": "*" })
+	response.end('OK')
+}).listen(8000)
 
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv')
+dotenv.config()
 
 const { Client,
 	GatewayIntentBits,
 	Partials,
 	ActivityType,
-} = require('discord.js');
+} = require('discord.js')
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -36,15 +36,15 @@ const client = new Client({
 		}],
 		status: 'dnd'
 	},
-});
+})
 
-const fs = require('fs');
+const fs = require('fs')
 fs.readdirSync('./src/events')
 	.filter(file => file.endsWith('.js'))
 	.map(file => require(`./events/${file}`))
 	.forEach(eventData => {
 		client.on(eventData.name, eventData.execute)
-	});
+	})
 
 const discordToken = process.env.DISCORD_TOKEN
 if (!discordToken) {

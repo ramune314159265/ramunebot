@@ -1,8 +1,8 @@
-const { DynamicLoader } = require('bcdice');
+const { DynamicLoader } = require('bcdice')
 
 module.exports.execute = async interaction => {
-	const loader = new DynamicLoader();
-	const gameSystem = await loader.dynamicLoad(interaction.options.getString('gamesystem') ?? 'DiceBot');
+	const loader = new DynamicLoader()
+	const gameSystem = await loader.dynamicLoad(interaction.options.getString('gamesystem') ?? 'DiceBot')
 
 	const diceCommand = interaction.options.getString('cmd')
 

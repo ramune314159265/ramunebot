@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js')
 module.exports = {
 	data: {
 		name: "ping",
@@ -45,6 +45,6 @@ module.exports = {
 					inline: true
 				},
 			)
-		await interaction.reply({ embeds: [embed], ephemeral: true });
+		await interaction.reply({ embeds: [embed], ephemeral: true })
 	}
 }

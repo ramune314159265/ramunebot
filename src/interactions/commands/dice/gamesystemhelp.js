@@ -1,8 +1,8 @@
-const { DynamicLoader, Version } = require('bcdice');
+const { DynamicLoader } = require('bcdice')
 
 module.exports.execute = async interaction => {
-	const loader = new DynamicLoader();
-	const gameSystem = await loader.dynamicLoad(interaction.options.getString('gamesystem'));
+	const loader = new DynamicLoader()
+	const gameSystem = await loader.dynamicLoad(interaction.options.getString('gamesystem'))
 	try {
 		await interaction.reply({
 			content: `## ${gameSystem.NAME}(${gameSystem.ID})のヘルプ\n${gameSystem.HELP_MESSAGE}`,

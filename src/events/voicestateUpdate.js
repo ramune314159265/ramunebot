@@ -1,13 +1,13 @@
 const {
 	Events
-} = require('discord.js');
-const { createLocalStorage } = require("localstorage-ponyfill");
+} = require('discord.js')
+const { createLocalStorage } = require("localstorage-ponyfill")
 
 module.exports.name = Events.VoiceStateUpdate
 module.exports.execute = (oldState, newState) => {
 	const { client } = require('..')
 
-	const localStorage = createLocalStorage();
+	const localStorage = createLocalStorage()
 	const guildChannelSetting = JSON.parse(localStorage.getItem(oldState.guild?.id ?? newState.guild?.id)) ?? {}
 	if (!guildChannelSetting.channelLog) {
 		return

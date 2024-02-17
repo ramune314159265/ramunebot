@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
-const fetch = require('node-fetch');
+const { EmbedBuilder } = require('discord.js')
+const fetch = require('node-fetch')
 
 const { quakeScales } = require('../../../util/earthquake')
 
@@ -12,12 +12,12 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true })
 		const rawQuakeInfo = await (await fetch('https://api.p2pquake.net/v2/jma/quake?limit=40')).json()
 
-		const quake = rawQuakeInfo.filter(info => info.earthquake.maxScale !== -1 && info.earthquake.hypocenter.name !== '' && info.earthquake.hypocenter.depth !== -1 && info.earthquake.hypocenter.magnitude !== -1);
+		const quake = rawQuakeInfo.filter(info => info.earthquake.maxScale !== -1 && info.earthquake.hypocenter.name !== '' && info.earthquake.hypocenter.depth !== -1 && info.earthquake.hypocenter.magnitude !== -1)
 		const embed = new EmbedBuilder()
 			.setTitle('地震情報')
 			.setColor('#58b058')
 			.setTimestamp()
-			.setFooter({ text: '情報源:気象庁' });
+			.setFooter({ text: '情報源:気象庁' })
 		const arr = ['過去25件の地震を表示します\n```ansi']
 
 		for (let n = 0; n < 25; n++) {

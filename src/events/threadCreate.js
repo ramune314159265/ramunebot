@@ -1,6 +1,7 @@
 const {
-	Events
-} = require('discord.js');
+	Events,
+	roleMention
+} = require('discord.js')
 
 module.exports.name = Events.ThreadCreate
 module.exports.execute = async thread => {

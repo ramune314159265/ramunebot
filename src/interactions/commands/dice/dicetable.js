@@ -1,9 +1,9 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js')
 
 module.exports.execute = async interaction => {
 	const modal = new ModalBuilder()
 		.setCustomId('dicetable')
-		.setTitle('ダイステーブル表の実行');
+		.setTitle('ダイステーブル表の実行')
 
 	const diceTableInput = new TextInputBuilder()
 		.setCustomId('dicetablecontent')
@@ -16,9 +16,9 @@ module.exports.execute = async interaction => {
 2:みかん
 3:いちご
 4:ぶどう`)
-		.setStyle(TextInputStyle.Paragraph);
+		.setStyle(TextInputStyle.Paragraph)
 
 	modal.addComponents(new ActionRowBuilder().addComponents(diceTableInput))
 
-	await interaction.showModal(modal);
+	await interaction.showModal(modal)
 }

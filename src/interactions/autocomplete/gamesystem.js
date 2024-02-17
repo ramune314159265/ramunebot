@@ -1,8 +1,8 @@
-const { DynamicLoader } = require('bcdice');
+const { DynamicLoader } = require('bcdice')
 
 module.exports.execute = async interaction => {
-	const focusedOption = interaction.options.getFocused(true);
-	const loader = new DynamicLoader();
+	const focusedOption = interaction.options.getFocused(true)
+	const loader = new DynamicLoader()
 	const choices = loader.listAvailableGameSystems()
 		.filter(system => (system.locale === 'ja_jp'))
 		.map((system) => {
@@ -10,5 +10,5 @@ module.exports.execute = async interaction => {
 		})
 		.filter(system => focusedOption.value === '' ? system : system.name.startsWith(focusedOption.value))
 		.slice(0, 24)
-	await interaction.respond(choices);
+	await interaction.respond(choices)
 }
