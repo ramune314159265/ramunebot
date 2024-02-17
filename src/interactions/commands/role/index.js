@@ -1,8 +1,8 @@
 const { ActionRowBuilder, StringSelectMenuBuilder, ComponentType, EmbedBuilder, roleMention } = require('discord.js')
 module.exports = {
 	data: {
-		name: "role",
-		description: "ロールを選択して付けたり外したりします",
+		name: 'role',
+		description: 'ロールを選択して付けたり外したりします',
 	},
 	async execute(interaction) {
 		const roles = {}

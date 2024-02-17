@@ -7,7 +7,7 @@ module.exports.execute = async interaction => {
 
 	const diceTableInput = new TextInputBuilder()
 		.setCustomId('dicetablecontent')
-		.setLabel("ダイステーブル表")
+		.setLabel('ダイステーブル表')
 		.setMaxLength(1000)
 		.setRequired(true)
 		.setPlaceholder(`例:テスト表

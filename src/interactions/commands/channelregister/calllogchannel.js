@@ -1,4 +1,4 @@
-const { createLocalStorage } = require("localstorage-ponyfill")
+const { createLocalStorage } = require('localstorage-ponyfill')
 const { channelMention } = require('discord.js')
 
 module.exports.execute = async interaction => {

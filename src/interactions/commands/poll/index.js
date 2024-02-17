@@ -1,30 +1,30 @@
 const { EmbedBuilder ,ApplicationCommandOptionType } = require('discord.js')
 module.exports = {
 	data: {
-		name: "poll",
-		description: "投票とかアンケートとかできます",
+		name: 'poll',
+		description: '投票とかアンケートとかできます',
 		options: [
 			{
 				type: ApplicationCommandOptionType.String,
-				name: "title",
-				description: "タイトルを入力します",
+				name: 'title',
+				description: 'タイトルを入力します',
 				required: true,
 			},
 			{
 				type: ApplicationCommandOptionType.String,
-				name: "type",
-				description: "タイプを入力します(投票、アンケートとか)",
+				name: 'type',
+				description: 'タイプを入力します(投票、アンケートとか)',
 				required: true,
 				choices: [
-					{ name: "アンケート", value: "アンケート" },
-					{ name: "投票", value: "投票" },
-					{ name: "クイズ", value: "クイズ" },
+					{ name: 'アンケート', value: 'アンケート' },
+					{ name: '投票', value: '投票' },
+					{ name: 'クイズ', value: 'クイズ' },
 				]
 			},
 			{
 				type: ApplicationCommandOptionType.String,
-				name: "choice",
-				description: "選択肢を入力します。&で区切ります(例: 選択肢1&選択肢2&選択肢3)",
+				name: 'choice',
+				description: '選択肢を入力します。&で区切ります(例: 選択肢1&選択肢2&選択肢3)',
 				required: true,
 			}
 		]

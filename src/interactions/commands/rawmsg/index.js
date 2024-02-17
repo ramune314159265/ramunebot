@@ -2,8 +2,8 @@ const { codeBlock } = require('@discordjs/builders')
 const { ApplicationCommandType } = require('discord.js')
 module.exports = {
 	data: {
-		name: "コードブロックで表示",
-		description: "",
+		name: 'コードブロックで表示',
+		description: '',
 		type: ApplicationCommandType.Message
 	},
 	async execute(interaction) {

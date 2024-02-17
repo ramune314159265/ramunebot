@@ -1,7 +1,7 @@
 const {
 	Events
 } = require('discord.js')
-const { createLocalStorage } = require("localstorage-ponyfill")
+const { createLocalStorage } = require('localstorage-ponyfill')
 
 module.exports.name = Events.VoiceStateUpdate
 module.exports.execute = (oldState, newState) => {

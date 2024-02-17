@@ -8,13 +8,13 @@ const { toHankakuAlphabet } = require('../util/toHankaku')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
 (async () => {
-	defaultGameSystem = await mainLoader.dynamicLoad("Cthulhu")
+	defaultGameSystem = await mainLoader.dynamicLoad('Cthulhu')
 })()
 
 module.exports.name = Events.MessageCreate
 module.exports.execute = async message => {
 	if (message.author.bot || message.system) return
-	if (message.channel.name == "英文大会") {
+	if (message.channel.name == '英文大会') {
 		message.channel.sendTyping()
 		try {
 			const result = await (await fetch(`https://script.google.com/macros/s/AKfycbzZtvOvf14TaMdRIYzocRcf3mktzGgXvlFvyczo/exec?text=${message.content}&source=en&target=ja`)).json()
@@ -35,7 +35,7 @@ module.exports.execute = async message => {
 
 		message.reply(result.text)
 	}
-	if (message.content === "qd" && client.quickDice?.[message.author.id]) {
+	if (message.content === 'qd' && client.quickDice?.[message.author.id]) {
 		const loader = new DynamicLoader()
 		const gameSystem = await loader.dynamicLoad(client.quickDice[message.author.id].gameSystem)
 

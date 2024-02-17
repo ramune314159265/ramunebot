@@ -16,30 +16,30 @@ const controlButtons = {
 	stop: new ButtonBuilder()
 		.setCustomId(JSON.stringify({ behavior: 'stop' }))
 		.setStyle(ButtonStyle.Danger)
-		.setLabel("再生停止")
+		.setLabel('再生停止')
 		.setEmoji('⏹'),
 	pause: new ButtonBuilder()
 		.setCustomId(JSON.stringify({ behavior: 'pause' }))
 		.setStyle(ButtonStyle.Primary)
-		.setLabel("一時停止")
+		.setLabel('一時停止')
 		.setEmoji('⏸'),
 	play: new ButtonBuilder()
 		.setCustomId(JSON.stringify({ behavior: 'play' }))
 		.setStyle(ButtonStyle.Success)
-		.setLabel("再生")
+		.setLabel('再生')
 		.setEmoji('▶'),
 }
 
 module.exports.execute = async interaction => {
 	await interaction.deferReply({ ephemeral: interaction.options.getString('messagetype') === 'message' ? false : true })
 	const playAudioUrl = interaction.options.getString('url')
-	let isLoop = interaction.options.getString('loop') === "true" ? true : false
+	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
 	const member = interaction.member
 	const channel = member.voice.channel
 
 	if (!channel) {
 		interaction.editReply({
-			content: "接続先のボイスチャンネルが見つかりません。",
+			content: '接続先のボイスチャンネルが見つかりません。',
 			ephemeral: true,
 		})
 		return

@@ -1,8 +1,8 @@
 const { EmbedBuilder } = require('discord.js')
 module.exports = {
 	data: {
-		name: "ping",
-		description: "応答速度測定"
+		name: 'ping',
+		description: '応答速度測定'
 	},
 	async execute(interaction) {
 		const embed = new EmbedBuilder()

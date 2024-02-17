@@ -4,8 +4,8 @@ const {
 
 module.exports = {
 	data: {
-		name: "call",
-		description: "通話に招待します",
+		name: 'call',
+		description: '通話に招待します',
 	},
 	async execute(interaction) {
 		if (interaction.guildId != '930376081196875787') await interaction.reply({ content: 'このコマンドはパーティークラフター専用です', ephemeral: true })
