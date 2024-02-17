@@ -1,3 +1,5 @@
+const startAt = Date.now()
+
 const http = require('http')
 http.createServer(function (request, response) {
 	response.writeHead(200, { 'Access-Control-Allow-Origin': '*' })
@@ -56,3 +58,4 @@ client.login(discordToken)
 process.on('uncaughtException', err => console.error('uncaughtException:', err))
 
 module.exports.client = client
+module.exports.startAt = startAt

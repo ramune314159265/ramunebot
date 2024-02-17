@@ -1,48 +1,27 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, time, TimestampStyles } = require('discord.js')
+const { startAt } = require('../../../index')
 module.exports = {
 	data: {
 		name: 'ping',
 		description: '応答速度測定'
 	},
 	async execute(interaction) {
+		console.log(interaction.id)
 		const embed = new EmbedBuilder()
 			.setTitle(interaction.client.user.tag)
 			.setColor('#58b058')
 			.addFields(
 				{
-					name: 'WS Ping',
-					value: `${interaction.client.ws.ping}ms`,
-					inline: true
+					name: '起動時間',
+					value: `${time(new Date(startAt), TimestampStyles.RelativeTime)}(${time(new Date(startAt), TimestampStyles.LongDateTime)})`
 				},
 				{
-					name: 'Memory Resident Set Size',
-					value: `${process.memoryUsage().rss / 1000000}MB`,
-					inline: true
+					name: 'Ping',
+					value: `${interaction.client.ws.ping}ms`
 				},
 				{
-					name: 'Memory heapTotal',
-					value: `${process.memoryUsage().heapTotal / 1000000}MB`,
-					inline: true
-				},
-				{
-					name: 'Memory heapUsed',
-					value: `${process.memoryUsage().heapUsed / 1000000}MB`,
-					inline: true
-				},
-				{
-					name: 'Memory external',
-					value: `${process.memoryUsage().external / 1000000}MB`,
-					inline: true
-				},
-				{
-					name: 'Memory arrayBuffers',
-					value: `${process.memoryUsage().arrayBuffers / 1000000}MB`,
-					inline: true
-				},
-				{
-					name: 'Process PID',
-					value: `${process.pid}`,
-					inline: true
+					name: 'メモリ使用量',
+					value: `${process.memoryUsage().rss / 1000000}MB`
 				},
 			)
 		await interaction.reply({ embeds: [embed], ephemeral: true })
