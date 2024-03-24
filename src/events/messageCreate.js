@@ -4,6 +4,7 @@ const {
 } = require('discord.js')
 
 const { DynamicLoader } = require('bcdice')
+const { createLocalStorage } = require('localstorage-ponyfill')
 const { toHankakuAlphabet } = require('../util/toHankaku')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
@@ -35,12 +36,15 @@ module.exports.execute = async message => {
 
 		message.reply(result.text)
 	}
-	if (message.content === 'qd' && client.quickDice?.[message.author.id]) {
+	if (message.content === 'qd') {
+		const localStorage = createLocalStorage()
+		const userSetting = JSON.parse(localStorage.getItem(message.author.id)) ?? {}
 		const loader = new DynamicLoader()
-		const gameSystem = await loader.dynamicLoad(client.quickDice[message.author.id].gameSystem)
+		const diceCommand = userSetting?.quickDice?.cmd ?? '1d100'
+		const gameSystem = await loader.dynamicLoad(userSetting?.quickDice?.gameSystem ?? 'DiceBot')
 
 		try {
-			const result = gameSystem.eval(client.quickDice[message.author.id].cmd)
+			const result = gameSystem.eval(diceCommand)
 			message.reply(result.text)
 		} catch (e) {
 			const replyMsg = await message.reply({

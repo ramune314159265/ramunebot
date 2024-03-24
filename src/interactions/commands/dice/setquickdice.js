@@ -1,18 +1,20 @@
 const { DynamicLoader } = require('bcdice')
+const { createLocalStorage } = require('localstorage-ponyfill')
 
 module.exports.execute = async interaction => {
+	const localStorage = createLocalStorage()
+	const userSetting = JSON.parse(localStorage.getItem(interaction.user.id)) ?? {}
 	const loader = new DynamicLoader()
 	const gameSystem = await loader.dynamicLoad(interaction.options.getString('gamesystem') ?? 'DiceBot')
 
 	const diceCommand = interaction.options.getString('cmd')
 
-	interaction.client.quickDice ??= {}
-	interaction.client.quickDice[interaction.user.id] ??= {}
+	userSetting.quickDice ??= {}
 
-	interaction.client.quickDice[interaction.user.id].cmd = diceCommand
-	interaction.client.quickDice[interaction.user.id].gameSystem = gameSystem.ID
-	interaction.client.quickDice[interaction.user.id].regex = gameSystem.COMMAND_PATTERN
+	userSetting.quickDice.cmd = diceCommand
+	userSetting.quickDice.gameSystem = gameSystem.ID
 
+	localStorage.setItem(interaction.user.id, JSON.stringify(userSetting))
 	await interaction.reply({
 		content: `クイックダイスを \`${diceCommand}\` (${gameSystem.NAME})に設定しました\n使うときは\`qd\`と入力してください`,
 		ephemeral: true
