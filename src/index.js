@@ -1,4 +1,5 @@
 const startAt = Date.now()
+console.log('loading libraries..')
 
 const http = require('http')
 http.createServer(function (request, response) {
@@ -40,6 +41,7 @@ const client = new Client({
 	},
 })
 
+console.log('loading events...')
 const fs = require('fs')
 fs.readdirSync('./src/events')
 	.filter(file => file.endsWith('.js'))
