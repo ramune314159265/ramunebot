@@ -96,6 +96,35 @@
 
 ### その他機能
 
-- ダイスロール
-- 通話ログ
-- 地震通知
+#### ダイスロール
+
+通常メッセージでダイスコマンドを送るか`/dice roll`でダイスロールできます  
+環境変数で`DICE_GAS_URL`を設定することで特定のGoogle Apps Scriptに送信ができます(100面ダイス、通常メッセージのみ)  
+↓スプレッドシートにユーザー名と1d100の出目を書き込む例  
+```js
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents)
+  const username = data.username
+  const rands = data.rands
+
+  //usernameがstring以外でrandsがarray以外だったら処理しない
+  if (!(typeof username === 'string') || !Array.isArray(rands)) {
+    return
+  }
+  const sheet = SpreadsheetApp.openById("スプレッドシートIDをここに入力")
+  rands.forEach(rand => {
+    sheet.appendRow([username, rand, Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd HH:mm:ss')])
+  })
+}
+```
+
+#### 通話ログ
+
+/channelregister calllogchannel `[<通話ログを送信するチャンネル>]` で設定可能  
+参加メッセージ: `@ユーザーメンション(@ユーザーID) が⁠#チャンネルメンション に参加しました`  
+退出メッセージ: `@ユーザーメンション(@ユーザーID) が⁠#チャンネルメンション から切断しました`  
+移動メッセージ: `@ユーザーメンション(@ユーザーID) が⁠#チャンネルメンション1 から #⁠チャンネルメンション2 に移動しました`  
+
+#### 地震通知
+
+~~/channelregister eewnoticechannel `[<地震情報を送信するチャンネル>]` で設定可能~~ 
