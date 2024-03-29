@@ -35,6 +35,23 @@ module.exports.execute = async message => {
 		}
 
 		message.reply(result.text)
+
+		if (!process.env.DICE_GAS_URL) {
+			return
+		}
+		const sendToGasData = {
+			username: message.author.username,
+			rands: result.rands
+				.filter(rand => rand[1] === 100)
+				.map(rand => rand[0])
+		}
+		fetch(process.env.DICE_GAS_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(sendToGasData)
+		})
 	}
 	if (message.content === 'qd') {
 		const localStorage = createLocalStorage()
