@@ -175,6 +175,12 @@ module.exports.execute = async interaction => {
 					collectorInteraction.update({
 						content: `${playlist.title}( ${playlist.url} )を再生中`,
 						ephemeral: true,
+						components: [
+							new ActionRowBuilder()
+								.addComponents(controlButtons.back, controlButtons.stop, controlButtons.pause, controlButtons.next),
+							new ActionRowBuilder()
+								.addComponents(getSelectMenu(playlist.items,playAudioIndex))
+						]
 					})
 					const resource = getResource(playlist.items[playAudioIndex].id)
 					player.play(resource)
