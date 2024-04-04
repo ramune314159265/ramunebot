@@ -6,7 +6,8 @@ const { AudioPlayerStatus,
 const { ButtonStyle,
 	ButtonBuilder,
 	ActionRowBuilder,
-	ComponentType
+	ComponentType,
+	StringSelectMenuBuilder
 } = require('discord.js')
 const ytdl = require('ytdl-core')
 const wait = require('util').promisify(setTimeout)
@@ -28,6 +29,22 @@ const controlButtons = {
 		.setStyle(ButtonStyle.Success)
 		.setLabel('再生')
 		.setEmoji('▶'),
+}
+
+const getVolumeMenu = () => {
+	const selectMenu = new StringSelectMenuBuilder()
+		.setCustomId(JSON.stringify({ behavior: 'volume' }))
+		.setPlaceholder('音量を選択...')
+
+	const volumes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1].reverse()
+	volumes.forEach(i => {
+		selectMenu
+			.addOptions({
+				label: `${i * 100}%`,
+				value: `${i}`,
+			})
+	})
+	return selectMenu
 }
 
 module.exports.execute = async interaction => {
@@ -80,11 +97,13 @@ module.exports.execute = async interaction => {
 		ephemeral: true,
 		components: [
 			new ActionRowBuilder()
-				.addComponents(controlButtons.stop, controlButtons.pause)
+				.addComponents(controlButtons.stop, controlButtons.pause),
+			new ActionRowBuilder()
+				.addComponents(getVolumeMenu())
 		]
 	})
 
-	const collector = await message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 12 * 60 * 60 * 1000 /*12時間*/ })
+	const collector = await message.createMessageComponentCollector({ time: 12 * 60 * 60 * 1000 /*12時間*/ })
 
 	collector.on('collect', collectorInteraction => {
 		const interactionData = JSON.parse(collectorInteraction.customId)
@@ -123,6 +142,21 @@ module.exports.execute = async interaction => {
 						]
 					})
 					break
+				case 'volume': {
+					const volume = Number(collectorInteraction.values[0])
+					resource.volume.setVolume(volume)
+					collectorInteraction.update({
+						content: `${playAudioUrl} を再生中`,
+						ephemeral: true,
+						components: [
+							new ActionRowBuilder()
+								.addComponents(controlButtons.stop, controlButtons.pause),
+							new ActionRowBuilder()
+								.addComponents(getVolumeMenu())
+						]
+					})
+					break
+				}
 				default:
 					break
 			}
