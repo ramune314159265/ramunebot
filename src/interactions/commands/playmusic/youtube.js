@@ -50,6 +50,7 @@ module.exports.execute = async interaction => {
 	await interaction.deferReply({ ephemeral: interaction.options.getString('messagetype') === 'message' ? false : true })
 	const playAudioUrl = interaction.options.getString('url')
 	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
+	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.5'
 	const member = interaction.member
 	const channel = member.voice.channel
 
@@ -75,6 +76,7 @@ module.exports.execute = async interaction => {
 	const connectionSubscribe = connection.subscribe(player)
 
 	const resource = getResource(ytdl.getURLVideoID(playAudioUrl))
+	resource.volume.setVolume(volume)
 
 	player.play(resource)
 
@@ -142,7 +144,7 @@ module.exports.execute = async interaction => {
 					})
 					break
 				case 'volume': {
-					const volume = Number(collectorInteraction.values[0])
+					volume = Number(collectorInteraction.values[0])
 					resource.volume.setVolume(volume)
 					collectorInteraction.update({
 						content: `${playAudioUrl} を再生中`,
