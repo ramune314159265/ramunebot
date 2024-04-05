@@ -1,7 +1,6 @@
 const {
 	Events,
 	messageLink,
-	EmbedBuilder,
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle
@@ -10,7 +9,7 @@ const {
 const { DynamicLoader } = require('bcdice')
 const { createLocalStorage } = require('localstorage-ponyfill')
 const { toHankakuAlphabet } = require('../util/toHankaku')
-const { fetchIacharaData } = require('../util/iachara')
+const { getIacharaEmbed } = require('../util/iachara')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
 (async () => {
@@ -83,33 +82,7 @@ module.exports.execute = async message => {
 			return
 		}
 		const id = regexpResult.groups.id
-		const characterData = await fetchIacharaData(id)
-		console.log(characterData)
-		if (!characterData.success) {
-			return
-		}
-
-		const embed = new EmbedBuilder()
-			.setAuthor({
-				name: 'いあきゃら',
-				iconURL: 'https://iachara.com/img/favicon.ico'
-			})
-			.setTitle(`${characterData.data.data.profile.name} (${characterData.data.data.profile.age}歳)`)
-			.setDescription(`
-職業…${characterData.data.data.profile.profession}
-身長…${characterData.data.data.profile.height}　体重…${characterData.data.data.profile.weight}
-性別…${characterData.data.data.profile.sex}
-出身…${characterData.data.data.profile.from}
-髪…${characterData.data.data.profile.hairColor}　瞳…${characterData.data.data.profile.eyeColor}　肌…${characterData.data.data.profile.skinColor}
-
-**能力値**
-STR ${String(characterData.data.data.abilities.str.value).padStart(' ')}　CON ${String(characterData.data.data.abilities.con.value).padStart(' ')}　POW ${String(characterData.data.data.abilities.pow.value).padStart(' ')}　DEX ${String(characterData.data.data.abilities.dex.value).padStart(' ')}
-APP ${String(characterData.data.data.abilities.app.value).padStart(' ')}　SIZ ${String(characterData.data.data.abilities.siz.value).padStart(' ')}　INT ${String(characterData.data.data.abilities.int.value).padStart(' ')}　EDU ${String(characterData.data.data.abilities.edu.value).padStart(' ')}
-`.trim()
-			)
-			.setURL(`https://iachara.com/view/${id}`)
-			.setColor('#1eff02')
-			.setImage(characterData.data.data.profile.icons[0].url)
+		const embed = await getIacharaEmbed(id)
 
 		message.channel.send({
 			content: '',
