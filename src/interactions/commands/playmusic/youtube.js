@@ -11,6 +11,7 @@ const { ButtonStyle,
 const ytdl = require('ytdl-core')
 const wait = require('util').promisify(setTimeout)
 const getResource = require('../../../util/getYoutubeResource')
+const { EmbedBuilder } = require('@discordjs/builders')
 
 const controlButtons = {
 	stop: new ButtonBuilder()
@@ -46,11 +47,31 @@ const getVolumeMenu = () => {
 	return selectMenu
 }
 
+const getStatusEmbed = ({ audioName, isLoop, volume, status }) => {
+	const statuses = {
+		playing: '再生中',
+		paused: '一時停止中',
+		stopped: '再生終了'
+	}
+	const embed = new EmbedBuilder()
+		.setTitle(`${audioName}`)
+		.addFields(
+			{ name: '音量', value: `${volume * 100}%`, inline: true },
+			{ name: 'ループ再生', value: isLoop ? 'オン' : 'オフ', inline: true },
+			{ name: 'ステータス', value: statuses[status], inline: true }
+		)
+		.setAuthor({ name: 'Youtube' })
+		.setTimestamp()
+	return embed
+}
+
 module.exports.execute = async interaction => {
 	await interaction.deferReply({ ephemeral: interaction.options.getString('messagetype') === 'message' ? false : true })
 	const playAudioUrl = interaction.options.getString('url')
+	const playAudioName = (await ytdl.getBasicInfo(playAudioUrl)).videoDetails.title
 	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
 	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.5'
+	let status = 'playing'
 	const member = interaction.member
 	const channel = member.voice.channel
 
@@ -83,12 +104,13 @@ module.exports.execute = async interaction => {
 	player.on(AudioPlayerStatus.Idle, async () => {
 		await wait(1000)
 		player.stop()
+		status = 'stopped'
 		if (isLoop == true) {
 			const resource = getResource(ytdl.getURLVideoID(playAudioUrl))
 			player.play(resource)
 			return
 		}
-		interaction.editReply({ content: `${playAudioUrl}を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [] })
+		interaction.editReply({ content: `${playAudioUrl}を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [], embeds: [] })
 		connectionSubscribe.unsubscribe()
 		connection.destroy()
 	})
@@ -101,6 +123,9 @@ module.exports.execute = async interaction => {
 				.addComponents(controlButtons.stop, controlButtons.pause),
 			new ActionRowBuilder()
 				.addComponents(getVolumeMenu())
+		],
+		embeds: [
+			getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
 		]
 	})
 
@@ -113,16 +138,19 @@ module.exports.execute = async interaction => {
 				case 'stop':
 					isLoop = false
 					player.stop()
+					status = 'stopped'
 					connectionSubscribe.unsubscribe()
 					connection.destroy()
 					collectorInteraction.update({
 						content: `${playAudioUrl} を停止しました\nコマンドのサジェスト:  </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`,
 						ephemeral: true,
-						components: []
+						components: [],
+						embeds: []
 					})
 					break
 				case 'pause':
 					player.pause()
+					status = 'paused'
 					collectorInteraction.update({
 						content: `${playAudioUrl} を一時停止中`,
 						ephemeral: true,
@@ -131,11 +159,15 @@ module.exports.execute = async interaction => {
 								.addComponents(controlButtons.stop, controlButtons.play),
 							new ActionRowBuilder()
 								.addComponents(getVolumeMenu())
+						],
+						embeds: [
+							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
 						]
 					})
 					break
 				case 'play':
 					player.unpause()
+					status = 'playing'
 					collectorInteraction.update({
 						content: `${playAudioUrl} を再生中`,
 						ephemeral: true,
@@ -144,6 +176,9 @@ module.exports.execute = async interaction => {
 								.addComponents(controlButtons.stop, controlButtons.pause),
 							new ActionRowBuilder()
 								.addComponents(getVolumeMenu())
+						],
+						embeds: [
+							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
 						]
 					})
 					break
@@ -158,6 +193,9 @@ module.exports.execute = async interaction => {
 								.addComponents(controlButtons.stop, controlButtons.pause),
 							new ActionRowBuilder()
 								.addComponents(getVolumeMenu())
+						],
+						embeds: [
+							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
 						]
 					})
 					break
