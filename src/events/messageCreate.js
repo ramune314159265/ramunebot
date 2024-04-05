@@ -83,6 +83,7 @@ module.exports.execute = async message => {
 		}
 		const id = regexpResult.groups.id
 		const embed = await getIacharaEmbed(id)
+		console.log(embed)
 
 		message.channel.send({
 			content: '',
