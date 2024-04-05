@@ -128,7 +128,9 @@ module.exports.execute = async interaction => {
 						ephemeral: true,
 						components: [
 							new ActionRowBuilder()
-								.addComponents(controlButtons.stop, controlButtons.play)
+								.addComponents(controlButtons.stop, controlButtons.play),
+							new ActionRowBuilder()
+								.addComponents(getVolumeMenu())
 						]
 					})
 					break
@@ -139,7 +141,9 @@ module.exports.execute = async interaction => {
 						ephemeral: true,
 						components: [
 							new ActionRowBuilder()
-								.addComponents(controlButtons.stop, controlButtons.pause)
+								.addComponents(controlButtons.stop, controlButtons.pause),
+							new ActionRowBuilder()
+								.addComponents(getVolumeMenu())
 						]
 					})
 					break
