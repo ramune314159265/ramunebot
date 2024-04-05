@@ -17,7 +17,7 @@ const getResource = videoId => {
 	})
 	const resource = createAudioResource(stream, {
 		inputType: StreamType.WebmOpus,
-		inlineVolume: false,
+		inlineVolume: true,
 	})
 	return resource
 }
