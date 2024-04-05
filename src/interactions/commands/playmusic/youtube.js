@@ -6,7 +6,6 @@ const { AudioPlayerStatus,
 const { ButtonStyle,
 	ButtonBuilder,
 	ActionRowBuilder,
-	ComponentType,
 	StringSelectMenuBuilder
 } = require('discord.js')
 const ytdl = require('ytdl-core')
