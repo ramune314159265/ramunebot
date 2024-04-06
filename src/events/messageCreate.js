@@ -85,7 +85,7 @@ module.exports.execute = async message => {
 		const embed = await getIacharaEmbed(id)
 		console.log(embed)
 
-		message.channel.send({
+		await message.channel.send({
 			content: '',
 			embeds: [embed],
 			components: [
