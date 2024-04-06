@@ -804,6 +804,10 @@ const parseIacharaData = (characterData) => {
 				totalPoint: skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint + defaultPoint
 			}
 		})
+	const debtMoney = characterData.money.debtMoney
+	const pocketMoney = characterData.money.pocketMoney
+	const belongings = characterData.money.belongings
+	const battleEquipments = characterData.battle
 	const memo = characterData.memo
 
 	return {
@@ -834,7 +838,11 @@ const parseIacharaData = (characterData) => {
 		luck,
 		knowledge,
 		modifiedSkills,
-		memo
+		memo,
+		debtMoney,
+		belongings,
+		battleEquipments,
+		pocketMoney
 	}
 }
 
@@ -850,8 +858,9 @@ const getIacharaEmbed = async (id) => {
 		str, con, pow, dex, app, siz, int, edu, san,
 		sanIndeterminate, hp, mp, db, idea, luck, knowledge,
 		modifiedSkills,
-		memo
-	} = await parseIacharaData(characterData)
+		debtMoney, pocketMoney, belongings, battleEquipments,
+		memo,
+	} = parseIacharaData(characterData)
 	const embed = new EmbedBuilder()
 		.setAuthor({
 			name: 'いあきゃら',
@@ -876,6 +885,15 @@ const getIacharaEmbed = async (id) => {
 技能名　　　　　追加 合計
 ━━━━━━━━━━━━━━━━━━━━━━
 ${modifiedSkills.map(skill => `${skill.name.padEnd(7, '　')}　${String(skill.addedPoint).padStart(2, '0')}　 **${String(skill.totalPoint).padStart(2, '0')}**`).join('\n')}
+
+**お金**
+所持金…**${pocketMoney}**円　借金…**${debtMoney}**円
+
+**戦闘 武器 防具**
+${battleEquipments.map(equipment => `${equipment.name}…射程**${equipment.range}**m　**${equipment.damage}**ダメージ　${equipment.detail}`).join('\n')}
+
+**所持物**
+${belongings.map(belonging => `${belonging.name}…**${belonging.quantity}**個　**${belonging.price}**円　${belonging.detail}`).join('\n')}
 
 **メモ**
 ${memo}
