@@ -789,6 +789,21 @@ const parseIacharaData = (characterData) => {
 	const idea = characterData.abilities.int.value * 5
 	const luck = characterData.abilities.pow.value * 5
 	const knowledge = characterData.abilities.edu.value * 5
+	const modifiedSkills = [...characterData.battleSkills.static, ...characterData.actionSkills.static, ...characterData.negotiationSkills.static, ...characterData.searchSkills.static, ...characterData.knowledgeSkills.static]
+		.filter(skill => (skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint) !== 0)
+		.map(skill => {
+			const defaultSkillPoints = {
+				'回避': dex * 2
+			}
+			const defaultPoint = skill.defaultPoint ?? defaultSkillPoints[skill.name] ?? 0
+			return {
+				...skill,
+				defaultPoint,
+				name: `${skill.name}${skill.additionalName ?? ''}`,
+				addedPoint: skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint,
+				totalPoint: skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint + defaultPoint
+			}
+		})
 
 	return {
 		name,
@@ -816,7 +831,8 @@ const parseIacharaData = (characterData) => {
 		db,
 		idea,
 		luck,
-		knowledge
+		knowledge,
+		modifiedSkills
 	}
 }
 
@@ -830,7 +846,8 @@ const getIacharaEmbed = async (id) => {
 	const {
 		name, age, profession, height, weight, sex, form, hairColor, eyeColor, skinColor,
 		str, con, pow, dex, app, siz, int, edu, san,
-		sanIndeterminate, hp, mp, db, idea, luck, knowledge
+		sanIndeterminate, hp, mp, db, idea, luck, knowledge,
+		modifiedSkills
 	} = await parseIacharaData(characterData)
 	const embed = new EmbedBuilder()
 		.setAuthor({
@@ -851,6 +868,11 @@ const getIacharaEmbed = async (id) => {
 
 \`SAN\`…**${san}**(不定領域**${sanIndeterminate}**)　\`HP\`…**${hp}**　\`MP\`…**${mp}**
 \`DB\`…**${db}**　\`アイデア\`…**${idea}**　\`幸運\`…**${luck}**　\`知識\`…**${knowledge}**
+
+**技能値**
+技能名　　　　　　追加　合計
+━━━━━━━━━━━━━━━━━━━━━━━━━
+${modifiedSkills.map(skill => `${skill.name.padEnd(8, '　')}　${String(skill.addedPoint).padStart(2, '0')}　　**${String(skill.totalPoint).padStart(2, '0')}**`).join('\n')}
 `.trim()
 		)
 		.setURL(`https://iachara.com/view/${id}`)
