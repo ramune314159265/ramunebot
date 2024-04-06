@@ -804,6 +804,7 @@ const parseIacharaData = (characterData) => {
 				totalPoint: skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint + defaultPoint
 			}
 		})
+	const memo = characterData.memo
 
 	return {
 		name,
@@ -832,7 +833,8 @@ const parseIacharaData = (characterData) => {
 		idea,
 		luck,
 		knowledge,
-		modifiedSkills
+		modifiedSkills,
+		memo
 	}
 }
 
@@ -847,7 +849,8 @@ const getIacharaEmbed = async (id) => {
 		name, age, profession, height, weight, sex, form, hairColor, eyeColor, skinColor,
 		str, con, pow, dex, app, siz, int, edu, san,
 		sanIndeterminate, hp, mp, db, idea, luck, knowledge,
-		modifiedSkills
+		modifiedSkills,
+		memo
 	} = await parseIacharaData(characterData)
 	const embed = new EmbedBuilder()
 		.setAuthor({
@@ -870,9 +873,12 @@ const getIacharaEmbed = async (id) => {
 \`DB\`…**${db}**　\`アイデア\`…**${idea}**　\`幸運\`…**${luck}**　\`知識\`…**${knowledge}**
 
 **技能値**
-技能名　　　　　　追加　合計
-━━━━━━━━━━━━━━━━━━━━━━━━━
-${modifiedSkills.map(skill => `${skill.name.padEnd(8, '　')}　${String(skill.addedPoint).padStart(2, '0')}　　**${String(skill.totalPoint).padStart(2, '0')}**`).join('\n')}
+技能名　　　　　追加 合計
+━━━━━━━━━━━━━━━━━━━━━━
+${modifiedSkills.map(skill => `${skill.name.padEnd(7, '　')}　${String(skill.addedPoint).padStart(2, '0')}　 **${String(skill.totalPoint).padStart(2, '0')}**`).join('\n')}
+
+**メモ**
+${memo}
 `.trim()
 		)
 		.setURL(`https://iachara.com/view/${id}`)
