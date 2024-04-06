@@ -789,7 +789,7 @@ const parseIacharaData = (characterData) => {
 	const idea = characterData.abilities.int.value * 5
 	const luck = characterData.abilities.pow.value * 5
 	const knowledge = characterData.abilities.edu.value * 5
-	const modifiedSkills = [...characterData.battleSkills.static, ...characterData.actionSkills.static, ...characterData.negotiationSkills.static, ...characterData.searchSkills.static, ...characterData.knowledgeSkills.static]
+	const modifiedSkills = [...characterData.battleSkills.static, ...characterData.searchSkills.static, ...characterData.actionSkills.static, ...characterData.negotiationSkills.static, ...characterData.knowledgeSkills.static]
 		.filter(skill => (skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint) !== 0)
 		.map(skill => {
 			const defaultSkillPoints = {
