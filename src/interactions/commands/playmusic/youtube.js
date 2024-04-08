@@ -117,7 +117,7 @@ module.exports.execute = async interaction => {
 			player.play(resource)
 			return
 		}
-		interaction.editReply({ content: `${playAudioUrl}を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [], embeds: [] })
+		interaction.editReply({ content: `${playAudioUrl} を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [], embeds: [] })
 		connectionSubscribe.unsubscribe()
 		connection.destroy()
 	})
