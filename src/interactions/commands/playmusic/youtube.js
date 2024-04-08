@@ -68,6 +68,13 @@ const getStatusEmbed = ({ audioName, isLoop, volume, status }) => {
 module.exports.execute = async interaction => {
 	await interaction.deferReply({ ephemeral: interaction.options.getString('messagetype') === 'message' ? false : true })
 	const playAudioUrl = interaction.options.getString('url')
+	if (!ytdl.validateURL(playAudioUrl)) {
+		interaction.editReply({
+			content: 'URLが正しくありません',
+			ephemeral: true,
+		})
+		return
+	}
 	const playAudioName = (await ytdl.getBasicInfo(playAudioUrl)).videoDetails.title
 	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
 	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.5'
