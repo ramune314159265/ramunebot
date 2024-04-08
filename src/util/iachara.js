@@ -130,6 +130,9 @@ const getIacharaEmbed = async (id) => {
 		return
 	}
 	const characterData = fetchedData.data.data
+	if (characterData.version !== '6th') {
+		return
+	}
 
 	const {
 		name, age, profession, height, weight, sex, form, hairColor, eyeColor, skinColor,
@@ -179,7 +182,7 @@ ${memo}
 		)
 		.setURL(`https://iachara.com/view/${id}`)
 		.setColor('#1eff02')
-		.setThumbnail(characterData.profile.icons[0].url)
+		.setThumbnail(characterData.profile.icons[0]?.url)
 
 	return embed
 }
