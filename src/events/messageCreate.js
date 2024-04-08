@@ -1,11 +1,15 @@
 const {
 	Events,
-	messageLink
+	messageLink,
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle
 } = require('discord.js')
 
 const { DynamicLoader } = require('bcdice')
 const { createLocalStorage } = require('localstorage-ponyfill')
 const { toHankakuAlphabet } = require('../util/toHankaku')
+const { getIacharaEmbed } = require('../util/iachara')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
 (async () => {
@@ -71,5 +75,30 @@ module.exports.execute = async message => {
 				replyMsg.delete()
 			}, 5000)
 		}
+	}
+	if (/https:\/\/iachara.com\/view\/(?:\d{1,8})/.test(message.content)) {
+		const regexpResult = /https:\/\/iachara.com\/view\/(?<id>\d{1,8})/.exec(message.content)
+		if (regexpResult === null) {
+			return
+		}
+		const id = regexpResult.groups.id
+		const embed = await getIacharaEmbed(id)
+		if (!embed) {
+			return
+		}
+
+		await message.channel.send({
+			content: '',
+			embeds: [embed],
+			components: [
+				new ActionRowBuilder().addComponents(
+					new ButtonBuilder()
+						.setStyle(ButtonStyle.Link)
+						.setLabel(`iachara.com/view/${id}`)
+						.setURL(`https://iachara.com/view/${id}`)
+				)
+			]
+		})
+		message.suppressEmbeds(true)
 	}
 }
