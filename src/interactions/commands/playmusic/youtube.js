@@ -77,7 +77,7 @@ module.exports.execute = async interaction => {
 	}
 	const playAudioName = (await ytdl.getBasicInfo(playAudioUrl)).videoDetails.title
 	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
-	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.5'
+	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.7'
 	let status = 'playing'
 	const member = interaction.member
 	const channel = member.voice.channel
