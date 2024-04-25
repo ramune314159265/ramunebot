@@ -12,6 +12,9 @@
     "globals": {
         "client": true
     },
+    "plugins": [
+        "jsdoc"
+    ],
     "rules": {
         "semi": [
             "error",
@@ -34,6 +37,7 @@
         "no-extra-semi": "error",
         "no-unexpected-multiline": "error",
         "no-unreachable": "error",
-        "no-irregular-whitespace": "off"
+        "no-irregular-whitespace": "off",
+        "jsdoc/no-undefined-types": 1
     }
 }

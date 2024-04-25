@@ -10,6 +10,7 @@ const { DynamicLoader } = require('bcdice')
 const { createLocalStorage } = require('localstorage-ponyfill')
 const { toHankakuAlphabet } = require('../util/toHankaku')
 const { getIacharaEmbed } = require('../util/iachara')
+const { sendAsUser } = require('../util/asUser')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
 (async () => {
@@ -38,7 +39,14 @@ module.exports.execute = async message => {
 			return
 		}
 
-		message.reply(result.text)
+		sendAsUser({
+			message: {
+				content: `${message.content} ${result.text}`
+			},
+			channel: message.channel,
+			member: message.member
+		})
+		message.delete()
 
 		if (!process.env.DICE_GAS_URL) {
 			return
@@ -66,7 +74,14 @@ module.exports.execute = async message => {
 
 		try {
 			const result = gameSystem.eval(diceCommand)
-			message.reply(result.text)
+			sendAsUser({
+				message: {
+					content: `${diceCommand} ${result.text}`
+				},
+				channel: message.channel,
+				member: message.member
+			})
+			message.delete()
 		} catch (e) {
 			const replyMsg = await message.reply({
 				content: `エラーが発生しました。コマンドが間違っている又はサーバーエラーの可能性があります。`
