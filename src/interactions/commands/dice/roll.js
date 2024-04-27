@@ -7,7 +7,7 @@ module.exports.execute = async interaction => {
 	try {
 		const result = gameSystem.eval(diceCommand)
 		await interaction.reply({
-			content: `${result.text}`,
+			content: `${diceCommand} ${result.text}`,
 			ephemeral: interaction.options.getString('messagetype') === 'ephemeral' ? true : false
 		})
 	} catch (e) {
