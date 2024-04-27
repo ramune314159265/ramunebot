@@ -24,15 +24,15 @@ const fetchIacharaData = async (id) => {
 const getDB = ({ str, siz }) => {
 	const value = str + siz
 	switch (true) {
-		case (2 <= value || value <= 12):
+		case (2 <= value && value <= 12):
 			return '-1D6'
-		case (13 <= value || value <= 16):
+		case (13 <= value && value <= 16):
 			return '-1D4'
-		case (17 <= value || value <= 24):
+		case (17 <= value && value <= 24):
 			return '0'
-		case (25 <= value || value <= 32):
+		case (25 <= value && value <= 32):
 			return '+1D4'
-		case (33 <= value || value <= 40):
+		case (33 <= value && value <= 40):
 			return '+1D6'
 		default:
 			return '?'
