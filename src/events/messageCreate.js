@@ -47,7 +47,7 @@ module.exports.execute = async message => {
 				content: `${message.content} ${result.text}`
 			},
 			channel: message.channel,
-			name: `${message.member.displayName} ${repliedMessage ? `/ @${repliedMessage.member?.displayName ?? repliedMessage.author.username.split('/')[0] ?? '不明'}「${truncate(repliedMessage.cleanContent, 10)}」に返信` : ''}`,
+			name: `${message.member.displayName}${repliedMessage ? `/@${repliedMessage.member?.displayName ?? repliedMessage.author.username.split('/')[0] ?? '不明'}「${truncate(repliedMessage.cleanContent, 10)}」に返信` : ''}`,
 			avatar: message.member.displayAvatarURL()
 		})
 
