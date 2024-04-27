@@ -11,6 +11,7 @@ const { createLocalStorage } = require('localstorage-ponyfill')
 const { toHankakuAlphabet } = require('../util/toHankaku')
 const { getIacharaEmbed } = require('../util/iachara')
 const { sendAsUser } = require('../util/asUser')
+const { truncate } = require('../util/truncate')
 const mainLoader = new DynamicLoader()
 let defaultGameSystem
 (async () => {
@@ -38,15 +39,17 @@ module.exports.execute = async message => {
 			message.author.send(`${messageLink(message.channelId, message.id)}\n${result.text}`)
 			return
 		}
+		message.delete()
 
+		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
 		sendAsUser({
 			message: {
 				content: `${message.content} ${result.text}`
 			},
 			channel: message.channel,
-			member: message.member
+			name: `${message.member.displayName} ${repliedMessage ? `/ @${repliedMessage.member?.displayName ?? repliedMessage.author.username.split('/')[0] ?? '不明'}「${truncate(repliedMessage.cleanContent, 10)}」に返信` : ''}`,
+			avatar: message.member.displayAvatarURL()
 		})
-		message.delete()
 
 		if (!process.env.DICE_GAS_URL) {
 			return
