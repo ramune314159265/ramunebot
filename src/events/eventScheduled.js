@@ -10,7 +10,7 @@ module.exports.execute = async event => {
 	event.client.channels.cache.get('1020881511899209851').threads.create({
 		name: `${event.name}(${event.creator.username})`,
 		message: {
-			content: `${roleMention('1034811611271135252')} ${userMention(event.creatorId)} がイベントを作成しました https://discord.gg/dZVZKjy5t7?event=${event.id} \n ※もし参加できそうであれば下の興味ありボタンを押してください`
+			content: `${roleMention('1034811611271135252')} ${userMention(event.creatorId)} がイベントを作成しました https://discord.com/events/930376081196875787/${event.id} \n ※もし参加できそうであれば下の興味ありボタンを押してください`
 		}
 	})
 }
