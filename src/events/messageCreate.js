@@ -42,10 +42,10 @@ module.exports.execute = async message => {
 		message.delete()
 
 		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
-		repliedMessage
-			? sendAsUser({
-				message: {
-					content: `${message.content} ${result.text}`,
+		sendAsUser({
+			message: {
+				content: `${message.content} ${result.text}`,
+				...(repliedMessage && {
 					components: [
 						repliedMessage ?
 							new ActionRowBuilder().addComponents(
@@ -55,16 +55,11 @@ module.exports.execute = async message => {
 									.setURL(repliedMessage.url)
 							) : {}
 					]
-				},
-				channel: message.channel,
-				member: message.member
-			}) : sendAsUser({
-				message: {
-					content: `${message.content} ${result.text}`
-				},
-				channel: message.channel,
-				member: message.member
-			})
+				})
+			},
+			channel: message.channel,
+			member: message.member
+		})
 
 		if (!process.env.DICE_GAS_URL) {
 			return
