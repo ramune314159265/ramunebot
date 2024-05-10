@@ -47,13 +47,12 @@ module.exports.execute = async message => {
 				content: `${message.content} ${result.text}`,
 				...(repliedMessage && {
 					components: [
-						repliedMessage ?
-							new ActionRowBuilder().addComponents(
-								new ButtonBuilder()
-									.setStyle(ButtonStyle.Link)
-									.setLabel(`返信元: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
-									.setURL(repliedMessage.url)
-							) : {}
+						new ActionRowBuilder().addComponents(
+							new ButtonBuilder()
+								.setStyle(ButtonStyle.Link)
+								.setLabel(`返信元: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
+								.setURL(repliedMessage.url)
+						)
 					]
 				})
 			},
