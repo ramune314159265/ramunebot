@@ -42,14 +42,29 @@ module.exports.execute = async message => {
 		message.delete()
 
 		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
-		sendAsUser({
-			message: {
-				content: `${message.content} ${result.text}`
-			},
-			channel: message.channel,
-			name: `${message.member.displayName}${repliedMessage ? `/@${repliedMessage.member?.displayName ?? repliedMessage.author.username.split('/')[0] ?? '不明'}「${truncate(repliedMessage.cleanContent, 10)}」に返信` : ''}`,
-			avatar: message.member.displayAvatarURL()
-		})
+		repliedMessage
+			? sendAsUser({
+				message: {
+					content: `${message.content} ${result.text}`,
+					components: [
+						repliedMessage ?
+							new ActionRowBuilder().addComponents(
+								new ButtonBuilder()
+									.setStyle(ButtonStyle.Link)
+									.setLabel(`返信元: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
+									.setURL(repliedMessage.url)
+							) : {}
+					]
+				},
+				channel: message.channel,
+				member: message.member
+			}) : sendAsUser({
+				message: {
+					content: `${message.content} ${result.text}`
+				},
+				channel: message.channel,
+				member: message.member
+			})
 
 		if (!process.env.DICE_GAS_URL) {
 			return
