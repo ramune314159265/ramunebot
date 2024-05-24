@@ -1,4 +1,4 @@
-const { MessageCreateOptions, TextBasedChannel } = require('discord.js')
+const { MessageCreateOptions, TextBasedChannel, GuildMember } = require('discord.js')
 
 const cacheWebhooks = new Map()
 
@@ -21,19 +21,20 @@ const getWebhook = async (channel) => {
 /**
  * webhookを使い別ユーザーに見せかけメッセージを送る
  * @module asUser
- * @param {{ message: MessageCreateOptions, name: string, avatar: string, channel: TextBasedChannel }} object - 設定
+ * @param {{ message: MessageCreateOptions, name: string, avatar: string, channel: TextBasedChannel, member: GuildMember }} object - 設定
  */
 const sendAsUser = async ({
 	message,
 	name,
 	avatar,
-	channel
+	channel,
+	member
 }) => {
 	const webhook = await await getWebhookInChannel(channel)
 	webhook.send({
 		...message,
-		username: name,
-		avatarURL: avatar,
+		username: name ?? member.displayName,
+		avatarURL: avatar ?? member.displayAvatarURL(),
 	})
 }
 
