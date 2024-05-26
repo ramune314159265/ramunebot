@@ -30,9 +30,12 @@ const sendAsUser = async ({
 	channel,
 	member
 }) => {
-	const webhook = await await getWebhookInChannel(channel)
+	const webhook = await await getWebhookInChannel(channel.isThread() ? channel.parent : channel)
 	webhook.send({
 		...message,
+		...(channel.isThread() && {
+			threadId: channel.id
+		}),
 		username: name ?? member.displayName,
 		avatarURL: avatar ?? member.displayAvatarURL(),
 	})
