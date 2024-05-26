@@ -6,12 +6,13 @@ const { AudioPlayerStatus,
 const { ButtonStyle,
 	ButtonBuilder,
 	ActionRowBuilder,
-	StringSelectMenuBuilder
+	StringSelectMenuBuilder,
 } = require('discord.js')
 const ytdl = require('ytdl-core')
 const wait = require('util').promisify(setTimeout)
 const getResource = require('../../../util/getYoutubeResource')
 const { EmbedBuilder } = require('@discordjs/builders')
+const { withTimeoutResolve } = require('../../../util/timeoutPromise')
 
 const controlButtons = {
 	stop: new ButtonBuilder()
@@ -75,7 +76,8 @@ module.exports.execute = async interaction => {
 		})
 		return
 	}
-	const playAudioName = (await ytdl.getBasicInfo(playAudioUrl)).videoDetails.title
+
+	const playAudioName = (await withTimeoutResolve(ytdl.getBasicInfo(playAudioUrl), 3000, {}))?.videoDetails?.title ?? '不明'
 	let isLoop = interaction.options.getString('loop') === 'true' ? true : false
 	let volume = interaction.options.getString('volume') ? Number(interaction.options.getString('volume')) : '0.7'
 	let status = 'playing'
