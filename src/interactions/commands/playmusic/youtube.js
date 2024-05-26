@@ -7,11 +7,11 @@ const { ButtonStyle,
 	ButtonBuilder,
 	ActionRowBuilder,
 	StringSelectMenuBuilder,
+	EmbedBuilder
 } = require('discord.js')
 const ytdl = require('ytdl-core')
 const wait = require('util').promisify(setTimeout)
 const getResource = require('../../../util/getYoutubeResource')
-const { EmbedBuilder } = require('@discordjs/builders')
 const { withTimeoutResolve } = require('../../../util/timeoutPromise')
 
 const controlButtons = {
@@ -62,6 +62,7 @@ const getStatusEmbed = ({ audioName, isLoop, volume, status }) => {
 			{ name: 'ステータス', value: statuses[status], inline: true }
 		)
 		.setAuthor({ name: 'Youtube' })
+		.setColor('Red')
 		.setTimestamp()
 	return embed
 }
