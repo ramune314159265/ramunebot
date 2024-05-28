@@ -60,7 +60,6 @@ module.exports.execute = async interaction => {
 
 	collector.on('collect', async collectorInteraction => {
 		const interactionTimeStamp = collectorInteraction.customId.split('.')[0]
-		console.log(timeStamp, interactionTimeStamp)
 		if (timeStamp !== interactionTimeStamp) {
 			return
 		}
