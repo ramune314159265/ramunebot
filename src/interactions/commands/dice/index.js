@@ -108,7 +108,7 @@ module.exports = {
 				description: 'キャラシートをセットします',
 			}, {
 				type: ApplicationCommandOptionType.Subcommand,
-				name: 'setchara',
+				name: 'chara',
 				description: 'setcharaでセットしたキャラのチャットパレットを開きます',
 			},
 		]

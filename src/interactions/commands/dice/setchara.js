@@ -1,5 +1,4 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js')
-const { createLocalStorage } = require('localstorage-ponyfill')
 
 module.exports.execute = async interaction => {
 	const modal = new ModalBuilder()
