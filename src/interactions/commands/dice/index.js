@@ -75,7 +75,7 @@ module.exports = {
 			}, {
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'bigdice',
-				description: '巨大な数のダイスを触れます xDyの形式でしか振れません',
+				description: '巨大な数のダイスを振れます xDyの形式でしか振れません',
 				options: [
 					{
 						type: ApplicationCommandOptionType.Integer,
