@@ -82,7 +82,7 @@ module.exports = {
 						name: 'x',
 						description: 'ダイスの個数 xDyのxの部分',
 						required: true,
-					},{
+					}, {
 						type: ApplicationCommandOptionType.Integer,
 						name: 'y',
 						description: 'ダイスの面数 xDyのyの部分',
@@ -102,6 +102,14 @@ module.exports = {
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'dicetable',
 				description: 'ダイステーブル表を実行します',
+			}, {
+				type: ApplicationCommandOptionType.Subcommand,
+				name: 'setchara',
+				description: 'キャラシートをセットします',
+			}, {
+				type: ApplicationCommandOptionType.Subcommand,
+				name: 'setchara',
+				description: 'setcharaでセットしたキャラのチャットパレットを開きます',
 			},
 		]
 	}
