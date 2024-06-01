@@ -10,9 +10,7 @@ const { createHash } = require('crypto')
 const mainLoader = new DynamicLoader()
 
 const returnCharaList = (charaData, hash) => {
-	const commands = charaData.commands
-		.split('\n')
-		.filter(i => i)
+	const commands = Object.values(charaData.commands)
 
 	const selectMenus = Array(Math.ceil(commands.length / 25))
 		.fill()
