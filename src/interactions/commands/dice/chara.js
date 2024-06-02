@@ -9,6 +9,8 @@ const { truncate } = require('../../../util/truncate')
 const { createHash } = require('crypto')
 const mainLoader = new DynamicLoader()
 
+const userLastInteraction = {}
+
 const returnCharaList = (charaData, hash) => {
 	const commands = Object.values(charaData.commands)
 
@@ -46,6 +48,7 @@ module.exports.execute = async interaction => {
 	const charaData = userSetting.chara
 
 	const timeStamp = Math.floor(performance.now()).toString()
+	userLastInteraction[interaction.user.id] = interaction
 	const message = await interaction.reply({
 		content: `${charaData.name} として振るダイスを選択してください`,
 		ephemeral: true,
@@ -57,6 +60,7 @@ module.exports.execute = async interaction => {
 	const collector = await message.createMessageComponentCollector({ time: 6 * 60 * 60 * 1000 /*6時間*/ })
 
 	collector.on('collect', async collectorInteraction => {
+		userLastInteraction[collectorInteraction.user.id].deleteReply?.()
 		const interactionTimeStamp = collectorInteraction.customId.split('.')[0]
 		if (timeStamp !== interactionTimeStamp) {
 			return
@@ -70,6 +74,7 @@ module.exports.execute = async interaction => {
 			name: `${truncate(charaData.name, 12)} / ${collectorInteraction.member.displayName}`,
 			channel: collectorInteraction.channel
 		})
+		userLastInteraction[collectorInteraction.user.id] = collectorInteraction
 		const m = await collectorInteraction.reply({
 			content: `${charaData.name} として振るダイスを選択してください`,
 			ephemeral: true,
