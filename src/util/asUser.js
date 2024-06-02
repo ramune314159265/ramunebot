@@ -30,8 +30,8 @@ const sendAsUser = async ({
 	channel,
 	member
 }) => {
-	const webhook = await await getWebhookInChannel(channel.isThread() ? channel.parent : channel)
-	webhook.send({
+	const webhook = await getWebhookInChannel(channel.isThread() ? channel.parent : channel)
+	await webhook.send({
 		...message,
 		...(channel.isThread() && {
 			threadId: channel.id
