@@ -128,4 +128,58 @@ module.exports.execute = async message => {
 		})
 		message.suppressEmbeds(true)
 	}
+	if (message.content.startsWith('cp ')) {
+		const [_, ...diceCommandName] = message.content.split(' ')
+		if (!diceCommandName.length) {
+			return
+		}
+		const localStorage = createLocalStorage()
+		const userSetting = JSON.parse(localStorage.getItem(message.author.id)) ?? {}
+		const diceCommand = userSetting.chara?.commands?.[diceCommandName.join(' ')]
+		if (!diceCommand) {
+			return
+		}
+		const diceCommandReplaced = diceCommand.replace(/{(.+?)}/g, (match, p1) => {
+			return [...userSetting.chara.params, ...userSetting.chara.status]
+				.filter(param => param.label === p1)[0]?.value ?? 0
+		})
+		message.delete()
+		const result = defaultGameSystem.eval(diceCommandReplaced)
+		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
+		sendAsUser({
+			message: {
+				content: `${diceCommandReplaced} ${result.text}`,
+				...(repliedMessage && {
+					components: [
+						new ActionRowBuilder().addComponents(
+							new ButtonBuilder()
+								.setStyle(ButtonStyle.Link)
+								.setLabel(`返信元: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
+								.setURL(repliedMessage.url)
+						)
+					]
+				})
+			},
+			channel: message.channel,
+			member: message.member
+		})
+
+		if (!process.env.DICE_GAS_URL) {
+			return
+		}
+
+		const sendToGasData = {
+			username: message.author.username,
+			rands: result.rands
+				.filter(rand => rand[1] === 100)
+				.map(rand => rand[0])
+		}
+		fetch(process.env.DICE_GAS_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(sendToGasData)
+		})
+	}
 }
