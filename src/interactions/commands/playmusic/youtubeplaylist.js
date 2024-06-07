@@ -79,7 +79,7 @@ module.exports.execute = async interaction => {
 	})
 	const connectionSubscribe = connection.subscribe(player)
 
-	const resource = getResource(playlist.items[playAudioIndex].id)
+	const resource = await getResource(playlist.items[playAudioIndex].id)
 
 	player.play(resource)
 
@@ -87,7 +87,7 @@ module.exports.execute = async interaction => {
 		await wait(1000)
 		player.stop()
 		playAudioIndex++
-		const resource = getResource(playlist.items[playAudioIndex].id)
+		const resource = await getResource(playlist.items[playAudioIndex].id)
 		player.play(resource)
 	})
 
@@ -104,7 +104,7 @@ module.exports.execute = async interaction => {
 
 	const collector = await message.createMessageComponentCollector({ time: 12 * 60 * 60 * 1000 /*12時間*/ })
 
-	collector.on('collect', collectorInteraction => {
+	collector.on('collect', async collectorInteraction => {
 		const interactionData = JSON.parse(collectorInteraction.customId)
 		try {
 			switch (interactionData.behavior) {
@@ -154,7 +154,7 @@ module.exports.execute = async interaction => {
 						content: `${playlist.title}( ${playlist.url} )を再生中`,
 						ephemeral: true,
 					})
-					const resource = getResource(playlist.items[playAudioIndex].id)
+					const resource = await getResource(playlist.items[playAudioIndex].id)
 					player.play(resource)
 				}
 				break
@@ -165,7 +165,7 @@ module.exports.execute = async interaction => {
 						content: `${playlist.title}( ${playlist.url} )を再生中`,
 						ephemeral: true,
 					})
-					const resource = getResource(playlist.items[playAudioIndex].id)
+					const resource = await getResource(playlist.items[playAudioIndex].id)
 					player.play(resource)
 				}
 				break
@@ -182,7 +182,7 @@ module.exports.execute = async interaction => {
 								.addComponents(getSelectMenu(playlist.items,playAudioIndex))
 						]
 					})
-					const resource = getResource(playlist.items[playAudioIndex].id)
+					const resource = await getResource(playlist.items[playAudioIndex].id)
 					player.play(resource)
 				}
 				break

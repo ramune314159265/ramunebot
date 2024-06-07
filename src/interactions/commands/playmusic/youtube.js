@@ -92,132 +92,139 @@ module.exports.execute = async interaction => {
 		})
 		return
 	}
-	const connection = joinVoiceChannel({
-		adapterCreator: channel.guild.voiceAdapterCreator,
-		channelId: channel.id,
-		guildId: channel.guild.id,
-		selfDeaf: true,
-		selfMute: false,
-	})
-	const player = createAudioPlayer({
-		behaviors: {
-			noSubscriber: NoSubscriberBehavior.Pause,
-		},
-	})
-	const connectionSubscribe = connection.subscribe(player)
+	try {
+		const connection = joinVoiceChannel({
+			adapterCreator: channel.guild.voiceAdapterCreator,
+			channelId: channel.id,
+			guildId: channel.guild.id,
+			selfDeaf: true,
+			selfMute: false,
+		})
+		const player = createAudioPlayer({
+			behaviors: {
+				noSubscriber: NoSubscriberBehavior.Pause,
+			},
+		})
+		const connectionSubscribe = connection.subscribe(player)
 
-	const resource = getResource(ytdl.getURLVideoID(playAudioUrl))
-	resource.volume.setVolume(volume)
+		const resource = await getResource(ytdl.getURLVideoID(playAudioUrl))
+		resource.volume.setVolume(volume)
 
-	player.play(resource)
+		player.play(resource)
 
-	player.on(AudioPlayerStatus.Idle, async () => {
-		await wait(1000)
-		player.stop()
-		status = 'stopped'
-		if (isLoop == true) {
-			const resource = getResource(ytdl.getURLVideoID(playAudioUrl))
-			player.play(resource)
-			return
-		}
-		interaction.editReply({ content: `${playAudioUrl} を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [], embeds: [] })
-		connectionSubscribe.unsubscribe()
-		connection.destroy()
-	})
-
-	const message = await interaction.editReply({
-		content: `${playAudioUrl} を再生中`,
-		ephemeral: true,
-		components: [
-			new ActionRowBuilder()
-				.addComponents(controlButtons.stop, controlButtons.pause),
-			new ActionRowBuilder()
-				.addComponents(getVolumeMenu())
-		],
-		embeds: [
-			getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
-		]
-	})
-
-	const collector = await message.createMessageComponentCollector({ time: 12 * 60 * 60 * 1000 /*12時間*/ })
-
-	collector.on('collect', collectorInteraction => {
-		const interactionData = JSON.parse(collectorInteraction.customId)
-		try {
-			switch (interactionData.behavior) {
-				case 'stop':
-					isLoop = false
-					player.stop()
-					status = 'stopped'
-					connectionSubscribe.unsubscribe()
-					connection.destroy()
-					collectorInteraction.update({
-						content: `${playAudioUrl} を停止しました\nコマンドのサジェスト:  </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`,
-						ephemeral: true,
-						components: [],
-						embeds: []
-					})
-					break
-				case 'pause':
-					player.pause()
-					status = 'paused'
-					collectorInteraction.update({
-						content: `${playAudioUrl} を一時停止中`,
-						ephemeral: true,
-						components: [
-							new ActionRowBuilder()
-								.addComponents(controlButtons.stop, controlButtons.play),
-							new ActionRowBuilder()
-								.addComponents(getVolumeMenu())
-						],
-						embeds: [
-							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
-						]
-					})
-					break
-				case 'play':
-					player.unpause()
-					status = 'playing'
-					collectorInteraction.update({
-						content: `${playAudioUrl} を再生中`,
-						ephemeral: true,
-						components: [
-							new ActionRowBuilder()
-								.addComponents(controlButtons.stop, controlButtons.pause),
-							new ActionRowBuilder()
-								.addComponents(getVolumeMenu())
-						],
-						embeds: [
-							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
-						]
-					})
-					break
-				case 'volume': {
-					volume = Number(collectorInteraction.values[0])
-					resource.volume.setVolume(volume)
-					collectorInteraction.update({
-						content: `${playAudioUrl} を再生中`,
-						ephemeral: true,
-						components: [
-							new ActionRowBuilder()
-								.addComponents(controlButtons.stop, controlButtons.pause),
-							new ActionRowBuilder()
-								.addComponents(getVolumeMenu())
-						],
-						embeds: [
-							getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
-						]
-					})
-					break
-				}
-				default:
-					break
+		player.on(AudioPlayerStatus.Idle, async () => {
+			await wait(1000)
+			player.stop()
+			status = 'stopped'
+			if (isLoop == true) {
+				const resource = await getResource(ytdl.getURLVideoID(playAudioUrl))
+				player.play(resource)
+				return
 			}
-		} catch (e) {
-			collectorInteraction.reply({
-				content: 'エラーが発生しました' + e,
-				ephemeral: true
-			})
-		}
-	})
+			interaction.editReply({ content: `${playAudioUrl} を再生停止しました\nコマンドのサジェスト: </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`, ephemeral: true, components: [], embeds: [] })
+			connectionSubscribe.unsubscribe()
+			connection.destroy()
+		})
+
+		const message = await interaction.editReply({
+			content: `${playAudioUrl} を再生中`,
+			ephemeral: true,
+			components: [
+				new ActionRowBuilder()
+					.addComponents(controlButtons.stop, controlButtons.pause),
+				new ActionRowBuilder()
+					.addComponents(getVolumeMenu())
+			],
+			embeds: [
+				getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
+			]
+		})
+
+		const collector = await message.createMessageComponentCollector({ time: 12 * 60 * 60 * 1000 /*12時間*/ })
+
+		collector.on('collect', collectorInteraction => {
+			const interactionData = JSON.parse(collectorInteraction.customId)
+			try {
+				switch (interactionData.behavior) {
+					case 'stop':
+						isLoop = false
+						player.stop()
+						status = 'stopped'
+						connectionSubscribe.unsubscribe()
+						connection.destroy()
+						collectorInteraction.update({
+							content: `${playAudioUrl} を停止しました\nコマンドのサジェスト:  </playmusic youtube:1063729380888682547>,</playmusic youtubeplaylist:1063729380888682547>`,
+							ephemeral: true,
+							components: [],
+							embeds: []
+						})
+						break
+					case 'pause':
+						player.pause()
+						status = 'paused'
+						collectorInteraction.update({
+							content: `${playAudioUrl} を一時停止中`,
+							ephemeral: true,
+							components: [
+								new ActionRowBuilder()
+									.addComponents(controlButtons.stop, controlButtons.play),
+								new ActionRowBuilder()
+									.addComponents(getVolumeMenu())
+							],
+							embeds: [
+								getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
+							]
+						})
+						break
+					case 'play':
+						player.unpause()
+						status = 'playing'
+						collectorInteraction.update({
+							content: `${playAudioUrl} を再生中`,
+							ephemeral: true,
+							components: [
+								new ActionRowBuilder()
+									.addComponents(controlButtons.stop, controlButtons.pause),
+								new ActionRowBuilder()
+									.addComponents(getVolumeMenu())
+							],
+							embeds: [
+								getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
+							]
+						})
+						break
+					case 'volume': {
+						volume = Number(collectorInteraction.values[0])
+						resource.volume.setVolume(volume)
+						collectorInteraction.update({
+							content: `${playAudioUrl} を再生中`,
+							ephemeral: true,
+							components: [
+								new ActionRowBuilder()
+									.addComponents(controlButtons.stop, controlButtons.pause),
+								new ActionRowBuilder()
+									.addComponents(getVolumeMenu())
+							],
+							embeds: [
+								getStatusEmbed({ isLoop, volume, status, audioName: playAudioName })
+							]
+						})
+						break
+					}
+					default:
+						break
+				}
+			} catch (e) {
+				collectorInteraction.reply({
+					content: 'エラーが発生しました' + e,
+					ephemeral: true
+				})
+			}
+		})
+	} catch (e) {
+		await interaction.editReply({
+			content: `エラーが発生しました: ${e}`,
+			ephemeral: true
+		})
+	}
 }
