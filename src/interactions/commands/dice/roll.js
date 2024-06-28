@@ -1,4 +1,5 @@
 const { DynamicLoader } = require('bcdice')
+const { escapeItalic } = require('discord.js')
 
 module.exports.execute = async interaction => {
 	const diceCommand = interaction.options.getString('cmd')
@@ -7,7 +8,7 @@ module.exports.execute = async interaction => {
 	try {
 		const result = gameSystem.eval(diceCommand)
 		await interaction.reply({
-			content: `${diceCommand} ${result.text}`,
+			content: escapeItalic(`${diceCommand} ${result.text}`),
 			ephemeral: interaction.options.getString('messagetype') === 'ephemeral' ? true : false
 		})
 	} catch (e) {

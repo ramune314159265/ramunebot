@@ -75,14 +75,14 @@ module.exports = {
 			}, {
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'bigdice',
-				description: '巨大な数のダイスを触れます xDyの形式でしか振れません',
+				description: '巨大な数のダイスを振れます xDyの形式でしか振れません',
 				options: [
 					{
 						type: ApplicationCommandOptionType.Integer,
 						name: 'x',
 						description: 'ダイスの個数 xDyのxの部分',
 						required: true,
-					},{
+					}, {
 						type: ApplicationCommandOptionType.Integer,
 						name: 'y',
 						description: 'ダイスの面数 xDyのyの部分',
@@ -102,6 +102,14 @@ module.exports = {
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'dicetable',
 				description: 'ダイステーブル表を実行します',
+			}, {
+				type: ApplicationCommandOptionType.Subcommand,
+				name: 'setchara',
+				description: 'キャラシートをセットします',
+			}, {
+				type: ApplicationCommandOptionType.Subcommand,
+				name: 'chara',
+				description: 'setcharaでセットしたキャラのチャットパレットを開きます',
 			},
 		]
 	}

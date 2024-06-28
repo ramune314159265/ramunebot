@@ -67,8 +67,14 @@ const parseIacharaData = (characterData) => {
 	const idea = characterData.abilities.int.value * 5
 	const luck = characterData.abilities.pow.value * 5
 	const knowledge = characterData.abilities.edu.value * 5
-	const modifiedSkills = [...characterData.battleSkills.static, ...characterData.searchSkills.static, ...characterData.actionSkills.static, ...characterData.negotiationSkills.static, ...characterData.knowledgeSkills.static]
-		.filter(skill => (skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint) !== 0)
+	const modifiedSkills = [
+		...characterData.battleSkills.static, ...characterData.battleSkills.additional,
+		...characterData.searchSkills.static, ...characterData.searchSkills.additional,
+		...characterData.actionSkills.static, ...characterData.actionSkills.additional,
+		...characterData.negotiationSkills.static, ...characterData.negotiationSkills.additional,
+		...characterData.knowledgeSkills.static, ...characterData.knowledgeSkills.additional,
+	]
+		.filter(skill => (skill.otherPoint + skill.growthPoint + skill.interestPoint + skill.professionPoint) !== 0 || 'id' in skill)
 		.map(skill => {
 			const defaultSkillPoints = {
 				'回避': dex * 2
@@ -90,15 +96,15 @@ const parseIacharaData = (characterData) => {
 
 	return {
 		name,
-		age: age ?? '?',
-		profession: profession ?? '?',
+		age: age || '?',
+		profession: profession || '?',
 		height: height ?? '0',
 		weight: weight ?? '0',
-		sex: sex ?? '?',
-		form: form ?? '?',
-		hairColor: hairColor ?? '?',
-		eyeColor: eyeColor ?? '?',
-		skinColor: skinColor ?? '?',
+		sex: sex || '?',
+		form: form || '?',
+		hairColor: hairColor || '?',
+		eyeColor: eyeColor || '?',
+		skinColor: skinColor || '?',
 		str,
 		con,
 		pow,
@@ -117,10 +123,10 @@ const parseIacharaData = (characterData) => {
 		knowledge,
 		modifiedSkills,
 		memo,
-		debtMoney,
+		pocketMoney: pocketMoney || '?',
+		debtMoney: debtMoney || '?',
 		belongings,
 		battleEquipments,
-		pocketMoney
 	}
 }
 
@@ -171,10 +177,10 @@ ${modifiedSkills.map(skill => `${skill.name.padEnd(7, '　')}　${String(skill.a
 所持金…**${pocketMoney}**円　借金…**${debtMoney}**円
 
 **戦闘 武器 防具**
-${battleEquipments.map(equipment => `${equipment.name}…射程**${equipment.range}**m　**${equipment.damage}**ダメージ　${equipment.detail}`).join('\n')}
+${battleEquipments.map(equipment => `${equipment.name}…射程**${equipment.range || '?'}**　**${equipment.damage || '?'}**ダメージ　${equipment.detail}`).join('\n')}
 
 **所持物**
-${belongings.map(belonging => `${belonging.name}…**${belonging.quantity}**個　**${belonging.price}**円　${belonging.detail}`).join('\n')}
+${belongings.map(belonging => `${belonging.name}…**${belonging.quantity || '?'}**個　**${belonging.price || '?'}**円　${belonging.detail}`).join('\n')}
 
 **メモ**
 ${memo}
