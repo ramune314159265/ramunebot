@@ -76,7 +76,7 @@ module.exports.execute = async interaction => {
 			channel: collectorInteraction.channel
 		})
 		userLastInteraction[collectorInteraction.user.id] = collectorInteraction
-		const m = await collectorInteraction.reply({
+		await collectorInteraction.reply({
 			content: `${charaData.name} として振るダイスを選択してください`,
 			ephemeral: true,
 			components: returnCharaList(charaData, timeStamp)
