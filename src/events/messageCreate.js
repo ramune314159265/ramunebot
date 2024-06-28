@@ -50,7 +50,7 @@ module.exports.execute = async message => {
 						new ActionRowBuilder().addComponents(
 							new ButtonBuilder()
 								.setStyle(ButtonStyle.Link)
-								.setLabel(`返信元: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
+								.setLabel(`返信先: @${repliedMessage.member?.displayName ?? repliedMessage.author.username ?? '不明'}「${truncate(repliedMessage.cleanContent, 30)}」`)
 								.setURL(repliedMessage.url)
 						)
 					]
