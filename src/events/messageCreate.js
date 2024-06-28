@@ -3,7 +3,8 @@ const {
 	messageLink,
 	ActionRowBuilder,
 	ButtonBuilder,
-	ButtonStyle
+	ButtonStyle,
+	escapeItalic
 } = require('discord.js')
 
 const { DynamicLoader } = require('bcdice')
@@ -44,7 +45,7 @@ module.exports.execute = async message => {
 		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
 		sendAsUser({
 			message: {
-				content: `${message.content} ${result.text}`,
+				content: escapeItalic(`${message.content} ${result.text}`),
 				...(repliedMessage && {
 					components: [
 						new ActionRowBuilder().addComponents(
@@ -88,7 +89,7 @@ module.exports.execute = async message => {
 			const result = gameSystem.eval(diceCommand)
 			sendAsUser({
 				message: {
-					content: `${diceCommand} ${result.text}`
+					content: escapeItalic(`${message.content} ${result.text}`)
 				},
 				channel: message.channel,
 				member: message.member
@@ -148,7 +149,7 @@ module.exports.execute = async message => {
 		const repliedMessage = message.reference?.messageId ? await message.channel.messages.fetch(message.reference?.messageId) : null
 		sendAsUser({
 			message: {
-				content: `${diceCommandReplaced} ${result.text}`,
+				content: escapeItalic(`${diceCommandReplaced} ${result.text}`),
 				...(repliedMessage && {
 					components: [
 						new ActionRowBuilder().addComponents(

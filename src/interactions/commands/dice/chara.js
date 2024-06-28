@@ -1,7 +1,8 @@
 const { createLocalStorage } = require('localstorage-ponyfill')
 const {
 	ActionRowBuilder,
-	StringSelectMenuBuilder
+	StringSelectMenuBuilder,
+	escapeItalic
 } = require('discord.js')
 const { sendAsUser } = require('../../../util/asUser')
 const { DynamicLoader } = require('bcdice')
@@ -68,7 +69,7 @@ module.exports.execute = async interaction => {
 		const diceCommand = collectorInteraction.values[0]
 		await sendAsUser({
 			message: {
-				content: `${diceCommand} ${defaultGameSystem.eval(diceCommand).text}`
+				content: escapeItalic(`${diceCommand} ${defaultGameSystem.eval(diceCommand).text}`)
 			},
 			avatar: charaData.iconUrl,
 			name: `${truncate(charaData.name, 12)} / ${collectorInteraction.member.displayName}`,
