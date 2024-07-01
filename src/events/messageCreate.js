@@ -36,8 +36,45 @@ module.exports.execute = async message => {
 		const diceCommand = toHankakuAlphabet(message.content)
 		const result = defaultGameSystem.eval(diceCommand)
 		if (result.secret) {
-			message.reply('**Secret Dice** 🎲')
-			message.author.send(`${messageLink(message.channelId, message.id)}\n${result.text}`)
+			const replyMessage = await message.reply('**Secret Dice** 🎲')
+			const dmMessage = await message.author.send({
+				content: `${messageLink(message.channelId, message.id)}\n${result.text}`,
+				components: [
+					new ActionRowBuilder()
+						.addComponents(
+							new ButtonBuilder()
+								.setCustomId('secretDice')
+								.setStyle(ButtonStyle.Primary)
+								.setLabel('シークレットダイスを公開')
+								.setEmoji('🎲')
+						)
+				]
+			})
+			const collector = await dmMessage.createMessageComponentCollector({ time: 12 * 60 * 60 * 1000 /*12時間*/ })
+			collector.on('collect', async collectorInteraction => {
+				collectorInteraction.reply({
+					content: '公開しました',
+					ephemeral: true
+				})
+				replyMessage.edit(`${message.content} ${result.text}`)
+				collector.stop()
+			})
+			collector.on('end', async () => {
+				dmMessage.edit({
+					content: dmMessage.content,
+					components: [
+						new ActionRowBuilder()
+							.addComponents(
+								new ButtonBuilder()
+									.setCustomId('secretDice')
+									.setStyle(ButtonStyle.Primary)
+									.setLabel('シークレットダイスを公開')
+									.setEmoji('🎲')
+									.setDisabled()
+							)
+					]
+				})
+			})
 			return
 		}
 		message.delete()
@@ -96,11 +133,11 @@ module.exports.execute = async message => {
 			})
 			message.delete()
 		} catch (e) {
-			const replyMsg = await message.reply({
+			const replyMessage = await message.reply({
 				content: `エラーが発生しました。コマンドが間違っている又はサーバーエラーの可能性があります。`
 			})
 			setTimeout(() => {
-				replyMsg.delete()
+				replyMessage.delete()
 			}, 5000)
 		}
 	}
