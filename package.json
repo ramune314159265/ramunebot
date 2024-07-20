@@ -16,6 +16,7 @@
     "@discordjs/builders": "^1.4.0",
     "@discordjs/rest": "^2.0.0",
     "@discordjs/voice": "^0.15.0",
+    "@distube/ytdl-core": "^4.13.5",
     "@types/node": "^18.0.6",
     "bcdice": "^4.6.0",
     "discord-api-types": "^0.37.85",
