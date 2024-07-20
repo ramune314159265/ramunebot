@@ -74,6 +74,9 @@ module.exports.execute = async interaction => {
 	const collector = await message.createMessageComponentCollector({ time: 6 * 60 * 60 * 1000 /*6時間*/ })
 
 	collector.on('collect', async collectorInteraction => {
+		if (collectorInteraction.user.id !== interaction.user.id) {
+			return
+		}
 		switch (collectorInteraction.customId) {
 			case 'customDice': {
 				const diceCommandInput = new TextInputBuilder()
