@@ -15,7 +15,7 @@
   "dependencies": {
     "@discordjs/builders": "^1.4.0",
     "@discordjs/rest": "^2.0.0",
-    "@discordjs/voice": "^0.15.0",
+    "@discordjs/voice": "^0.17.0",
     "@distube/ytdl-core": "^4.14.4",
     "@types/node": "^20.14.10",
     "bcdice": "^4.6.0",
