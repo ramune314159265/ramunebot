@@ -14,6 +14,7 @@ const { Client,
 	GatewayIntentBits,
 	Partials,
 	ActivityType,
+	Events,
 } = require('discord.js')
 const client = new Client({
 	intents: [
@@ -55,9 +56,11 @@ if (!discordToken) {
 	throw new Error('.envのDISCORD_TOKENが設定されていません')
 }
 
-client.login(discordToken)
-
+client.on(Events.ShardError, console.error)
+client.on(Events.Error, console.error)
 process.on('uncaughtException', err => console.error('uncaughtException:', err))
+
+client.login(discordToken)
 
 module.exports.client = client
 module.exports.startAt = startAt
