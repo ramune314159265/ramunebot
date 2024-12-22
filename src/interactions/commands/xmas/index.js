@@ -25,7 +25,7 @@ module.exports = {
 	async execute(interaction) {
 		// https://github.com/yug1224/xmas/blob/main/app.ts
 
-		const height = Math.max(Math.min(interaction.options.getInteger('size'), 17), 5) ?? 20
+		const height = Math.max(Math.min(interaction.options.getInteger('size') ?? 20, 17), 5)
 
 		const topStar = ' \u2605' // ' ★'
 		const fullWidthSolidus = '\u001b[32m\uFF0F' // '／'
