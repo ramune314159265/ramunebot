@@ -7,6 +7,9 @@ module.exports.name = Events.VoiceStateUpdate
 module.exports.execute = (oldState, newState) => {
 	const { client } = require('..')
 
+	if (oldState.member.user.bot) {
+		return
+	}
 	const localStorage = createLocalStorage()
 	const guildChannelSetting = JSON.parse(localStorage.getItem(oldState.guild?.id ?? newState.guild?.id)) ?? {}
 	if (!guildChannelSetting.channelLog) {
